@@ -1,11 +1,12 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "canvas-apps-tools",
-  "version": "1.0.0",
-  "description": "AI skills for Power Apps Canvas Apps - generate paste-ready YAML from mockups, screenshots, or text descriptions",
   "owner": {
     "name": "Tolu Victor Sanwoolu",
     "email": "sanwoolutolu@gmail.com"
+  },
+  "metadata": {
+    "description": "AI skills for Power Apps Canvas Apps - generate paste-ready YAML from mockups, screenshots, or text descriptions",
+    "version": "1.0.0"
   },
   "plugins": [
     {
