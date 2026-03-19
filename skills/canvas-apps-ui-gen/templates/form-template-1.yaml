@@ -1,0 +1,377 @@
+# TEMPLATE: Multi-field Data Entry Form
+# TAGS: form, input, fields, textinput, datepicker, combobox, dropdown, radio, number, submit, save, reset
+# DESCRIPTION: A wrapping horizontal AutoLayout container holding multiple form field groups. Each field is a rounded container with a bold label on top and the input below. Fields wrap to new rows automatically (LayoutWrap: true). Includes Date, Radio, Text, Number, ComboBox, and LongText fields. Action buttons (Reset + Save) are right-aligned at the bottom.
+# USE WHEN: Any screen with multiple input fields, data entry forms, edit screens, or record creation. The wrapping layout adapts to different numbers of fields automatically.
+# COMPONENTS: GroupContainer@1.5.0, Label@2.5.1, DatePicker@0.0.46, Radio@0.0.25, TextInput@0.0.54, NumberInput@2.9.12, ComboBox@0.0.51, Button@0.0.45
+# ============================================
+- fullFormContainer:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Height: =Parent.Height
+      LayoutAlignItems: =LayoutAlignItems.Center
+      LayoutDirection: =LayoutDirection.Vertical
+      RadiusBottomLeft: =0
+      RadiusBottomRight: =0
+      RadiusTopLeft: =0
+      RadiusTopRight: =0
+      Width: =Parent.Width
+    Children:
+      - formFieldsContainer:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Height: =500
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutGap: =15
+            LayoutOverflowY: =LayoutOverflow.Scroll
+            LayoutWrap: =true
+            PaddingBottom: =15
+            PaddingLeft: =15
+            PaddingRight: =15
+            PaddingTop: =15
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =1234
+          Children:
+            - Container_FormField_Date:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle.Height + datePickerIn.Height + lblError.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Appointment Date*"
+                  - datePickerIn:
+                      Control: DatePicker@0.0.46
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Appearance: ='DatePickerCanvas.Appearance'.FilledLighter
+                        Fill: =Color.Transparent
+                        Height: =40
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                  - lblError:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+            - Container_FormField_Radio:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle_1.Height + radioIn_1.Height + lblError_1.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle_1:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Service Type*"
+                  - radioIn_1:
+                      Control: Radio@0.0.25
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Height: =40
+                        Layout: ='RadioGroupCanvas.Layout'.Horizontal
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                  - lblError_1:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+            - Container_FormField_Text:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle_2.Height + textInput.Height + lblError_2.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle_2:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Service Name*"
+                  - textInput:
+                      Control: TextInput@0.0.54
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Appearance: ='TextInputCanvas.Appearance'.FilledLighter
+                        Height: =40
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                  - lblError_2:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+            - Container_FormField_Number:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle_3.Height + NumberInput.Height + lblError_3.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle_3:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Service Fee*"
+                  - NumberInput:
+                      Control: NumberInput@2.9.12
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Appearance: ='NumberInput.Appearance'.FilledLighter
+                        Height: =40
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                  - lblError_3:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+            - Container_FormField_Dropdown:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle_4.Height + comboBoxInput.Height + lblError_4.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle_4:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Service Personnel*"
+                  - comboBoxInput:
+                      Control: ComboBox@0.0.51
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Appearance: ='ComboboxCanvas.Appearance'.FilledLighter
+                        Height: =40
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                  - lblError_4:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+            - Container_FormField_LongText:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  AlignInContainer: =AlignInContainer.SetByContainer
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(244,244,244,1)
+                  Height: =Self.PaddingBottom + Self.PaddingTop + lblFormFieldTitle_5.Height + textInput_1.Height + lblError_5.Height
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutMaxWidth: =Parent.Width - Self.PaddingLeft - Self.PaddingRight
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =500
+                  PaddingBottom: =10
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =10
+                  RadiusBottomLeft: =15
+                  RadiusBottomRight: =15
+                  RadiusTopLeft: =15
+                  RadiusTopRight: =15
+                Children:
+                  - lblFormFieldTitle_5:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: ="Service Description*"
+                  - textInput_1:
+                      Control: TextInput@0.0.54
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Appearance: ='TextInputCanvas.Appearance'.FilledLighter
+                        Height: =60
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                  - lblError_5:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        AutoHeight: =true
+                        Color: =RGBA(215, 58, 60, 1)
+                        LayoutMinHeight: =16
+                        LayoutMinWidth: =16
+                        Size: =11
+                        Text: =
+      - formBTNsContainer:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            FillPortions: =0
+            Height: =60
+            LayoutAlignItems: =LayoutAlignItems.Center
+            LayoutDirection: =LayoutDirection.Horizontal
+            LayoutGap: =15
+            LayoutJustifyContent: =LayoutJustifyContent.End
+            LayoutMinHeight: =16
+            LayoutMinWidth: =16
+            PaddingBottom: =8
+            PaddingLeft: =15
+            PaddingRight: =15
+            PaddingTop: =8
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - ButtonCanvas1_1:
+                Control: Button@0.0.45
+                Properties:
+                  Appearance: ='ButtonCanvas.Appearance'.Outline
+                  Icon: ="ArrowReset"
+                  Layout: ='ButtonCanvas.Layout'.IconAfter
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Text: ="Reset"
+                  Width: =200
+            - ButtonCanvas1:
+                Control: Button@0.0.45
+                Properties:
+                  Icon: ="Save"
+                  Layout: ='ButtonCanvas.Layout'.IconAfter
+                  LayoutMinHeight: =16
+                  LayoutMinWidth: =16
+                  Text: ="Save"
+                  Width: =200

@@ -1,0 +1,116 @@
+# TEMPLATE: Horizontal Tab Bar with Underline
+# TAGS: tab, tabs, tab-bar, navigation, horizontal-tabs, underline-tabs, section-switcher
+# DESCRIPTION: A horizontal tab bar built from a Horizontal Gallery inside a Vertical AutoLayout container. Each tab has a label, an active underline indicator, and a transparent button overlay. A 1px divider sits below the gallery. Tabs switch content sections via a varActiveTab integer variable.
+# USE WHEN: Screen needs horizontal tab navigation to switch between content sections on the same screen (e.g., form wizard steps, detail views with multiple panels, settings pages with grouped options).
+# COMPONENTS: GroupContainer@1.5.0, Gallery@2.15.0, Label@2.5.1, Rectangle@2.3.0, Classic/Button@2.2.0
+# NOTES:
+#   - Initialize state in screen OnVisible: Set(varActiveTab, 1)
+#   - Populate tab data via ClearCollect or inline Table() with {TabName, TabID} records
+#     Example: ClearCollect(colTabs, {TabName: "General", TabID: 1}, {TabName: "Details", TabID: 2})
+#   - Wire content section visibility: Visible: =varActiveTab = 1  (for tab 1 content)
+#   - TemplateSize: =140 gives equal-width tabs; use Self.Width / Self.AllItemsCount - 1 for auto-fit
+#   - This is a SECTION template — paste as a child of your main vertical content container
+# ============================================
+- tabSection:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =RGBA(0,0,0,0)
+      FillPortions: =0
+      Height: =42
+      LayoutAlignItems: =LayoutAlignItems.Stretch
+      LayoutDirection: =LayoutDirection.Vertical
+      LayoutGap: =0
+      LayoutJustifyContent: =LayoutJustifyContent.Start
+      LayoutMinHeight: =0
+      LayoutMinWidth: =0
+      LayoutWrap: =false
+      PaddingBottom: =0
+      PaddingLeft: =30
+      PaddingRight: =0
+      PaddingTop: =0
+      RadiusBottomLeft: =0
+      RadiusBottomRight: =0
+      RadiusTopLeft: =0
+      RadiusTopRight: =0
+    Children:
+      - tabGallery:
+          Control: Gallery@2.15.0
+          Variant: Horizontal
+          Properties:
+            AlignInContainer: =AlignInContainer.Stretch
+            BorderColor: =RGBA(0,0,0,0)
+            DelayItemLoading: =false
+            FillPortions: =1
+            Items: =colTabs
+            LayoutMinHeight: =0
+            LayoutMinWidth: =0
+            ShowScrollbar: =false
+            TemplatePadding: =0
+            TemplateSize: =140
+          Children:
+            - tabLabel:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Color: =If(varActiveTab = ThisItem.TabID, RGBA(30,30,35,1), RGBA(140,140,150,1))
+                  Font: =Font.Lato
+                  FontWeight: =If(varActiveTab = ThisItem.TabID, FontWeight.Semibold, FontWeight.Normal)
+                  Height: =Parent.TemplateHeight - 3
+                  Size: =10
+                  Text: =ThisItem.TabName
+                  VerticalAlign: =VerticalAlign.Middle
+                  Width: =Parent.TemplateWidth
+                  X: =0
+                  Y: =0
+            - tabUnderline:
+                Control: Rectangle@2.3.0
+                Properties:
+                  BorderColor: =RGBA(0,0,0,0)
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =0
+                  Fill: =RGBA(30,30,35,1)
+                  Height: =2
+                  Visible: =varActiveTab = ThisItem.TabID
+                  Width: =Parent.TemplateWidth - 20
+                  X: =10
+                  Y: =Parent.TemplateHeight - 2
+            - tabOverlay:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  BorderColor: =RGBA(0,0,0,0)
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =0
+                  Color: =RGBA(0,0,0,0)
+                  DisabledBorderColor: =RGBA(0,0,0,0)
+                  Fill: =RGBA(0,0,0,0)
+                  FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+                  FocusedBorderThickness: =2
+                  FontWeight: =FontWeight.Normal
+                  Height: =Parent.TemplateHeight
+                  HoverBorderColor: =RGBA(0,0,0,0)
+                  HoverColor: =RGBA(0,0,0,0)
+                  HoverFill: =RGBA(0,0,0,0.03)
+                  OnSelect: =Set(varActiveTab, ThisItem.TabID)
+                  PressedBorderColor: =RGBA(0,0,0,0)
+                  PressedColor: =RGBA(0,0,0,0)
+                  PressedFill: =RGBA(0,0,0,0.06)
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Text: =""
+                  Width: =Parent.TemplateWidth
+      - tabDivider:
+          Control: Rectangle@2.3.0
+          Properties:
+            AlignInContainer: =AlignInContainer.Stretch
+            BorderColor: =RGBA(0,0,0,0)
+            BorderStyle: =BorderStyle.None
+            BorderThickness: =0
+            Fill: =RGBA(222,224,228,1)
+            FillPortions: =0
+            Height: =1
+            LayoutMinHeight: =0
+            LayoutMinWidth: =0

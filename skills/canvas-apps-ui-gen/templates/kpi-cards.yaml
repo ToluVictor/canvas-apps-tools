@@ -1,0 +1,237 @@
+# TEMPLATE: kpi-cards
+# TAGS: kpi, metric, card, gallery, stats, dashboard, progress, auto-fit
+# USE WHEN: horizontal row of metric/KPI cards; summary stats at top of dashboard; cards with icon, label, value, and optional progress bar
+# VARIANTS: basic (icon + label + value), with-progress (adds a custom progress bar inside each card)
+# NOTES:
+#   - Pattern: Horizontal Gallery with TemplateSize: =Self.Width / Self.AllItemsCount - 1
+#   - The -1 in TemplateSize prevents rounding-induced horizontal scroll
+#   - Gallery Items uses an inline Table() expression — replace with real data source
+#   - Progress bar: two nested ManualLayout containers; inner width = Parent.Width * (Value / MaxValue)
+#   - Status badge inside card uses Fill: =ColorFade(Self.BorderColor, 80%)
+#   - Card container uses ManualLayout with DropShadow.Light for subtle elevation
+#   - KPI icons use inline SVG via data URI (Substitute + EncodeUrl pattern)
+
+# ─────────────────────────────────────────────
+# VARIANT A: Basic KPI gallery (icon + label + value)
+# ─────────────────────────────────────────────
+- kpiGallery:
+    Control: Gallery@2.15.0
+    Variant: Horizontal
+    Properties:
+      Height: =120
+      Width: =Parent.Width
+      TemplateSize: =Self.Width / Self.AllItemsCount - 1
+      TemplatePadding: =0
+      ShowScrollbar: =false
+      Items: |-
+        =Table(
+            {KPILabel: "Total Sales", KPIValue: "1,284", KPISubtext: "+12% this month", KPIColor: RGBA(0,142,210,1)},
+            {KPILabel: "Active Users", KPIValue: "342", KPISubtext: "24 online now", KPIColor: RGBA(0,168,120,1)},
+            {KPILabel: "Pending Orders", KPIValue: "57", KPISubtext: "3 urgent", KPIColor: RGBA(255,140,0,1)},
+            {KPILabel: "Resolved Tickets", KPIValue: "98%", KPISubtext: "Last 30 days", KPIColor: RGBA(42,43,71,1)}
+        )
+    Children:
+      - kpiCardContainer:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =Parent.TemplateHeight - 10
+            Width: =Parent.TemplateWidth - 10
+            X: =5
+            Y: =5
+            Fill: =Color.White
+            DropShadow: =DropShadow.Light
+            RadiusBottomLeft: =10
+            RadiusBottomRight: =10
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+          Children:
+            - kpiAccentBar:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  Height: =4
+                  Width: =Parent.Width
+                  X: =0
+                  Y: =0
+                  Fill: =ThisItem.KPIColor
+                  RadiusTopLeft: =10
+                  RadiusTopRight: =10
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+            - kpiIconContainer:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  Height: =36
+                  Width: =36
+                  X: =15
+                  Y: =20
+                  Fill: =ColorFade(ThisItem.KPIColor, 85%)
+                  RadiusBottomLeft: =18
+                  RadiusBottomRight: =18
+                  RadiusTopLeft: =18
+                  RadiusTopRight: =18
+                Children:
+                  - kpiIcon:
+                      Control: Image@2.2.3
+                      Properties:
+                        Height: =Parent.Height
+                        Width: =Parent.Width
+                        PaddingTop: =8
+                        PaddingBottom: =8
+                        PaddingLeft: =8
+                        PaddingRight: =8
+                        BorderColor: =RGBA(0,0,0,0)
+                        BorderStyle: =BorderStyle.None
+                        DisabledBorderColor: =RGBA(0,0,0,0)
+                        DisabledFill: =RGBA(0,0,0,0)
+                        HoverBorderColor: =RGBA(0,0,0,0)
+                        HoverFill: =RGBA(0,0,0,0)
+                        PressedBorderColor: =RGBA(0,0,0,0)
+                        PressedFill: =RGBA(0,0,0,0)
+                        Image: |-
+                          ="data:image/svg+xml;utf8, " & EncodeUrl(
+                              Substitute(
+                                  "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                            <path d='M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07z'/>
+                          </svg>",
+                                  "currentColor", Substitute(JSON(ThisItem.KPIColor), """", "")
+                              )
+                          )
+            - kpiValueLabel:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(42,43,71,1)
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Bold
+                  Size: =18
+                  Height: =28
+                  Width: =Parent.Width - 65
+                  X: =60
+                  Y: =18
+                  Text: =ThisItem.KPIValue
+                  VerticalAlign: =VerticalAlign.Middle
+            - kpiNameLabel:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(100,100,120,1)
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Normal
+                  Size: =9
+                  Height: =18
+                  Width: =Parent.Width - 65
+                  X: =60
+                  Y: =48
+                  Text: =ThisItem.KPILabel
+            - kpiSubtextLabel:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(140,140,160,1)
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Normal
+                  Size: =8
+                  Height: =16
+                  Width: =Parent.Width - 30
+                  X: =15
+                  Y: =88
+                  Text: =ThisItem.KPISubtext
+
+# ─────────────────────────────────────────────
+# VARIANT B: KPI gallery WITH custom progress bar
+# ─────────────────────────────────────────────
+- kpiProgressGallery:
+    Control: Gallery@2.15.0
+    Variant: Horizontal
+    Properties:
+      Height: =140
+      Width: =Parent.Width
+      TemplateSize: =Self.Width / Self.AllItemsCount - 1
+      TemplatePadding: =0
+      ShowScrollbar: =false
+      Items: |-
+        =Table(
+            {KPILabel: "Sales Target", KPIValue: 847, KPIMax: 1000, KPIUnit: "orders", KPIColor: RGBA(0,142,210,1)},
+            {KPILabel: "Support SLA", KPIValue: 92, KPIMax: 100, KPIUnit: "%", KPIColor: RGBA(0,168,120,1)},
+            {KPILabel: "Inventory Used", KPIValue: 680, KPIMax: 1200, KPIUnit: "units", KPIColor: RGBA(255,140,0,1)},
+            {KPILabel: "Budget Spent", KPIValue: 34500, KPIMax: 50000, KPIUnit: "USD", KPIColor: RGBA(42,43,71,1)}
+        )
+    Children:
+      - kpiProgCardContainer:
+          Control: GroupContainer@1.5.0
+          Variant: ManualLayout
+          Properties:
+            Height: =Parent.TemplateHeight - 10
+            Width: =Parent.TemplateWidth - 10
+            X: =5
+            Y: =5
+            Fill: =Color.White
+            DropShadow: =DropShadow.Light
+            RadiusBottomLeft: =10
+            RadiusBottomRight: =10
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+          Children:
+            - kpiProgLabel:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(100,100,120,1)
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  Height: =20
+                  Width: =Parent.Width - 30
+                  X: =15
+                  Y: =15
+                  Text: =ThisItem.KPILabel
+            - kpiProgValue:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =RGBA(42,43,71,1)
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Bold
+                  Size: =20
+                  Height: =30
+                  Width: =Parent.Width - 30
+                  X: =15
+                  Y: =38
+                  Text: =Text(ThisItem.KPIValue, "[$-en-US]#,##0") & " " & ThisItem.KPIUnit
+            - kpiProgBarTrack:
+                Control: GroupContainer@1.5.0
+                Variant: ManualLayout
+                Properties:
+                  Height: =8
+                  Width: =Parent.Width - 30
+                  X: =15
+                  Y: =78
+                  Fill: =RGBA(230,232,240,1)
+                  RadiusBottomLeft: =4
+                  RadiusBottomRight: =4
+                  RadiusTopLeft: =4
+                  RadiusTopRight: =4
+                Children:
+                  - kpiProgBarFill:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =Parent.Height
+                        Width: =Parent.Width * (ThisItem.KPIValue / ThisItem.KPIMax)
+                        X: =0
+                        Y: =0
+                        Fill: =ThisItem.KPIColor
+                        RadiusBottomLeft: =4
+                        RadiusBottomRight: =4
+                        RadiusTopLeft: =4
+                        RadiusTopRight: =4
+            - kpiProgPercent:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =ThisItem.KPIColor
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  Height: =18
+                  Width: =Parent.Width - 30
+                  X: =15
+                  Y: =95
+                  Text: =Text(Round(ThisItem.KPIValue / ThisItem.KPIMax * 100, 0), "[$-en-US]0") & "% of target"

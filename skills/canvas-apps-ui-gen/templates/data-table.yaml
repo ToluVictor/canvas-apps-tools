@@ -1,0 +1,341 @@
+# TEMPLATE: data-table
+# TAGS: table, grid, data, list, rows, columns, header, gallery, status, badge, action, sort
+# USE WHEN: tabular data display; records list; data grid with columns; any screen with a table/grid of rows
+# VARIANTS: basic (header + rows), with-status-badge, with-action-buttons
+# NOTES:
+#   - Pattern: static header row (AutoLayout GroupContainer) + vertical Gallery beneath it
+#   - Column widths use FillPortions on Labels inside AutoLayout containers — header and gallery MUST match
+#   - Status badge: Fill: =ColorFade(Self.BorderColor, 80%) — never hardcode both fill and border separately
+#   - Row divider: a 1px Rectangle at the bottom of each gallery template
+#   - Action buttons use the custom-button icon-only variant (ManualLayout container + SVG + Classic/Button overlay)
+#   - Alternating row fill: Fill: =If(Mod(ThisItem.ItemIndex, 2) = 0, RGBA(248,249,252,1), Color.White)
+#   - Selected row: Fill: =If(ThisItem.IsSelected, ColorFade(RGBA(0,142,210,1), 90%), ...)
+#   - Never use real Dataverse table names — always use colSampleData (ClearCollect on OnVisible)
+
+# ─────────────────────────────────────────────
+# FULL DATA TABLE (header + gallery + status badge + action buttons)
+# ─────────────────────────────────────────────
+- dataTableContainer:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      Direction: =LayoutDirection.Vertical
+      Height: =Parent.Height - 20
+      Width: =Parent.Width
+      X: =0
+      Y: =0
+      Fill: =Color.White
+      DropShadow: =DropShadow.Light
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+      Gap: =0
+    Children:
+      # ── Header row ──────────────────────────
+      - tableHeader:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            Direction: =LayoutDirection.Horizontal
+            LayoutAlignItems: =LayoutAlignItems.Center
+            Height: =44
+            Width: =Parent.Width
+            Fill: =RGBA(42,43,71,1)
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            PaddingLeft: =15
+            PaddingRight: =15
+            Gap: =0
+          Children:
+            - hdrTitle:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =Color.White
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  FillPortions: =3
+                  Height: =Parent.Height
+                  Text: ="Title"
+            - hdrCategory:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =Color.White
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  FillPortions: =2
+                  Height: =Parent.Height
+                  Text: ="Category"
+            - hdrStatus:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =Color.White
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  FillPortions: =2
+                  Height: =Parent.Height
+                  Text: ="Status"
+            - hdrDate:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =Color.White
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  FillPortions: =2
+                  Height: =Parent.Height
+                  Text: ="Date"
+            - hdrActions:
+                Control: Label@2.5.1
+                Properties:
+                  Color: =Color.White
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  Size: =9
+                  FillPortions: =1
+                  Height: =Parent.Height
+                  Text: ="Actions"
+                  Align: =Align.Center
+
+      # ── Data rows (gallery) ─────────────────
+      - tableGallery:
+          Control: Gallery@2.15.0
+          Variant: Vertical
+          Properties:
+            Height: =Parent.Height - tableHeader.Height
+            Width: =Parent.Width
+            TemplatePadding: =0
+            TemplateSize: =50
+            ShowScrollbar: =true
+            Items: |-
+              =Table(
+                  {Title: "Redesign onboarding flow", Category: "Design", Status: "Active", Date: DateValue("03/20/2026")},
+                  {Title: "Fix login redirect bug", Category: "Engineering", Status: "Pending", Date: DateValue("03/22/2026")},
+                  {Title: "Q2 campaign brief", Category: "Marketing", Status: "Closed", Date: DateValue("03/15/2026")},
+                  {Title: "Icon set for mobile app", Category: "Design", Status: "Active", Date: DateValue("03/28/2026")},
+                  {Title: "API rate limiting review", Category: "Engineering", Status: "Pending", Date: DateValue("04/01/2026")}
+              )
+          Children:
+            - tableRow:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  Direction: =LayoutDirection.Horizontal
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  Height: =Parent.TemplateHeight
+                  Width: =Parent.TemplateWidth
+                  Fill: =If(ThisItem.IsSelected, ColorFade(RGBA(0,142,210,1), 90%), If(Mod(ThisItem.ItemIndex, 2) = 0, RGBA(248,249,252,1), Color.White))
+                  PaddingLeft: =15
+                  PaddingRight: =15
+                  Gap: =0
+                Children:
+                  - rowTitle:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(42,43,71,1)
+                        Font: =Font.Lato
+                        FontWeight: =FontWeight.Semibold
+                        Size: =9
+                        FillPortions: =3
+                        Height: =Parent.Height
+                        Text: =ThisItem.Title
+                        Overflow: =Overflow.Hidden
+                  - rowCategory:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(80,82,105,1)
+                        Font: =Font.Lato
+                        FontWeight: =FontWeight.Normal
+                        Size: =9
+                        FillPortions: =2
+                        Height: =Parent.Height
+                        Text: =ThisItem.Category
+                  # Status badge — Fill derived from BorderColor via ColorFade
+                  - rowStatusBadge:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        Height: =24
+                        Width: =80
+                        Y: =(Parent.Height - Self.Height) / 2
+                        FillPortions: =2
+                        Fill: =ColorFade(rowStatusBadge.BorderColor, 80%)
+                        BorderColor: =Switch(
+                            ThisItem.Status,
+                            "Active", RGBA(0,168,120,1),
+                            "Pending", RGBA(255,140,0,1),
+                            "Closed", RGBA(160,160,180,1),
+                            RGBA(100,100,120,1)
+                        )
+                        BorderThickness: =1
+                        RadiusBottomLeft: =12
+                        RadiusBottomRight: =12
+                        RadiusTopLeft: =12
+                        RadiusTopRight: =12
+                      Children:
+                        - rowStatusLabel:
+                            Control: Label@2.5.1
+                            Properties:
+                              Color: =rowStatusBadge.BorderColor
+                              Font: =Font.Lato
+                              FontWeight: =FontWeight.Semibold
+                              Size: =8
+                              Height: =Parent.Height
+                              Width: =Parent.Width
+                              Text: =ThisItem.Status
+                              Align: =Align.Center
+                              VerticalAlign: =VerticalAlign.Middle
+                  - rowDate:
+                      Control: Label@2.5.1
+                      Properties:
+                        Color: =RGBA(100,100,120,1)
+                        Font: =Font.Lato
+                        FontWeight: =FontWeight.Normal
+                        Size: =9
+                        FillPortions: =2
+                        Height: =Parent.Height
+                        Text: =Text(ThisItem.Date, "[$-en-US]dd mmm yyyy")
+                  # Action buttons column — icon-only buttons
+                  - rowActions:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        FillPortions: =1
+                        Height: =Parent.Height
+                        Fill: =RGBA(0,0,0,0)
+                      Children:
+                        - rowEditBtn:
+                            Control: GroupContainer@1.5.0
+                            Variant: ManualLayout
+                            Properties:
+                              Height: =28
+                              Width: =28
+                              X: =5
+                              Y: =(Parent.Height - Self.Height) / 2
+                              Fill: =RGBA(42,43,71,1)
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - rowEditIcon:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    Height: =Parent.Height
+                                    Width: =Parent.Width
+                                    PaddingTop: =6
+                                    PaddingBottom: =6
+                                    PaddingLeft: =6
+                                    PaddingRight: =6
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    BorderStyle: =BorderStyle.None
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    DisabledFill: =RGBA(0,0,0,0)
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    HoverFill: =RGBA(0,0,0,0)
+                                    PressedBorderColor: =RGBA(0,0,0,0)
+                                    PressedFill: =RGBA(0,0,0,0)
+                                    Image: |-
+                                      ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                          Substitute(
+                                              "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                                        <path d='M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z'/>
+                                      </svg>",
+                                              "currentColor", "RGBA(246,246,250,1)"
+                                          )
+                                      )
+                              - rowEditOverlay:
+                                  Control: Classic/Button@2.2.0
+                                  Properties:
+                                    Text: =""
+                                    Fill: =RGBA(0,0,0,0)
+                                    HoverFill: =RGBA(0,0,0,0.1)
+                                    PressedFill: =RGBA(0,0,0,0.2)
+                                    Color: =RGBA(255,255,255,1)
+                                    HoverColor: =RGBA(255,255,255,1)
+                                    PressedColor: =RGBA(255,255,255,1)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    PressedBorderColor: =RGBA(0,0,0,0)
+                                    FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+                                    FocusedBorderThickness: =4
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    Height: =Parent.Height
+                                    Width: =Parent.Width
+                                    OnSelect: =false
+                        - rowDeleteBtn:
+                            Control: GroupContainer@1.5.0
+                            Variant: ManualLayout
+                            Properties:
+                              Height: =28
+                              Width: =28
+                              X: =38
+                              Y: =(Parent.Height - Self.Height) / 2
+                              Fill: =RGBA(220,53,69,1)
+                              RadiusBottomLeft: =8
+                              RadiusBottomRight: =8
+                              RadiusTopLeft: =8
+                              RadiusTopRight: =8
+                            Children:
+                              - rowDeleteIcon:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    Height: =Parent.Height
+                                    Width: =Parent.Width
+                                    PaddingTop: =6
+                                    PaddingBottom: =6
+                                    PaddingLeft: =6
+                                    PaddingRight: =6
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    BorderStyle: =BorderStyle.None
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    DisabledFill: =RGBA(0,0,0,0)
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    HoverFill: =RGBA(0,0,0,0)
+                                    PressedBorderColor: =RGBA(0,0,0,0)
+                                    PressedFill: =RGBA(0,0,0,0)
+                                    Image: |-
+                                      ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                          Substitute(
+                                              "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                                        <path d='M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z'/>
+                                        <path d='M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z'/>
+                                      </svg>",
+                                              "currentColor", "RGBA(255,255,255,1)"
+                                          )
+                                      )
+                              - rowDeleteOverlay:
+                                  Control: Classic/Button@2.2.0
+                                  Properties:
+                                    Text: =""
+                                    Fill: =RGBA(0,0,0,0)
+                                    HoverFill: =RGBA(255,255,255,0.15)
+                                    PressedFill: =RGBA(255,255,255,0.25)
+                                    Color: =RGBA(255,255,255,1)
+                                    HoverColor: =RGBA(255,255,255,1)
+                                    PressedColor: =RGBA(255,255,255,1)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    PressedBorderColor: =RGBA(0,0,0,0)
+                                    FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+                                    FocusedBorderThickness: =4
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    Height: =Parent.Height
+                                    Width: =Parent.Width
+                                    OnSelect: =false
+            # Row bottom divider
+            - rowDivider:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Height: =1
+                  Width: =Parent.TemplateWidth
+                  Y: =Parent.TemplateHeight - 1
+                  Fill: =RGBA(230,232,240,1)
+                  BorderStyle: =BorderStyle.None

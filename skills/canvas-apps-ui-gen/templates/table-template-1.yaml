@@ -1,0 +1,501 @@
+# TEMPLATE: Responsive Data Table with Status Pills and Row Actions
+# TAGS: table, grid, list, rows, data, gallery, vertical, columns, header, status, badge, pill, search, filter, action, button
+# DESCRIPTION: A white-background table container with a title/action bar at the top, a sticky column header row, and a vertical gallery for data rows. Each row has a category icon, subject label, location, a colored status pill, a date, and a row-level action button. Columns use FillPortions for responsive widths. Includes a "View All" button in the title bar.
+# USE WHEN: Any data list, record browser, task list, or grid with multiple columns. Handles status indicators, category icons, and row-level actions well. Responsive — columns hide on smaller screens using Size checks.
+# COMPONENTS: GroupContainer@1.5.0, Gallery@2.15.0, Label@2.5.1, Image@2.2.3, Rectangle@2.3.0, Classic/Button@2.2.0
+# ============================================
+- tableContainer:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =RGBA(255, 255, 255, 1)
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Vertical
+      PaddingBottom: =20
+      PaddingLeft: =20
+      PaddingRight: =20
+      PaddingTop: =10
+      RadiusBottomLeft: =20
+      RadiusBottomRight: =20
+      RadiusTopLeft: =20
+      RadiusTopRight: =20
+      Width: =Parent.Width
+    Children:
+      - Container9_GalleryTitle:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            FillPortions: =0
+            Height: =50
+            LayoutDirection: =LayoutDirection.Horizontal
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+          Children:
+            - lblMyUpcomingTasks:
+                Control: Label@2.5.1
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  BorderColor: =RGBA(0, 18, 107, 1)
+                  FillPortions: =2
+                  Font: =Font.Lato
+                  FontWeight: =FontWeight.Semibold
+                  LayoutMinHeight: =0
+                  LayoutMinWidth: =100
+                  Size: =12
+                  Text: ="My Upcoming Tasks"
+            - Container1_1:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutGap: =10
+                  LayoutJustifyContent: =LayoutJustifyContent.End
+                  LayoutMinHeight: =0
+                  LayoutMinWidth: =150
+                  PaddingRight: =5
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =140
+                Children:
+                  - CustomButton_11:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.SetByContainer
+                        BorderColor: =RGBA(42, 43, 71,1)
+                        BorderStyle: =BorderStyle.None
+                        BorderThickness: =2
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(42, 43, 71,1)
+                        FillPortions: =0
+                        Height: =35
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Width: =120
+                      Children:
+                        - lblViewAll:
+                            Control: Label@2.5.1
+                            Properties:
+                              Align: =Align.Center
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =RGBA(246,246,250,1)
+                              Font: =Font.Lato
+                              FontWeight: =FontWeight.Semibold
+                              Height: =Parent.Height
+                              PaddingRight: =35
+                              Size: =10
+                              Text: ="View All"
+                              Width: =Parent.Width
+                        - img_RightIconSmall_1:
+                            Control: Image@2.2.3
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Height: =25
+                              Image: |-
+                                ="data:image/svg+xml;utf8, "&EncodeUrl(
+                                    Substitute(
+                                        "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-right-short' viewBox='0 0 16 16'>
+                                  <path fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/>
+                                </svg>",
+                                        "currentColor", "RGBA(246,246,250,1)"
+                                    )
+                                )
+                              Width: =25
+                              X: =80
+                              Y: =(Parent.Height - Self.Height)/2
+                        - btnViewAllItems:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =ColorFade(Self.Fill, -15%)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(255, 255, 255, 1)
+                              DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                              Fill: =RGBA(0, 0, 0, 0)
+                              Font: =Font.'Open Sans'
+                              Height: =Parent.Height
+                              HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                              HoverColor: =RGBA(255, 255, 255, 1)
+                              HoverFill: =RGBA(0,0,0,0.1)
+                              PressedBorderColor: =Self.Fill
+                              PressedColor: =Self.Fill
+                              PressedFill: =RGBA(0,0,0,0.2)
+                              Text: =""
+                              Width: =Parent.Width
+      - Container10_Gallery:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            BorderColor: =RGBA(131,141,157,1)
+            BorderThickness: =1
+            DropShadow: =DropShadow.None
+            Height: =Container12_TableData.Height + Self.PaddingBottom + Self.PaddingTop
+            LayoutDirection: =LayoutDirection.Vertical
+            RadiusBottomLeft: =10
+            RadiusBottomRight: =10
+            RadiusTopLeft: =10
+            RadiusTopRight: =10
+          Children:
+            - Container11_TableHeaders:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Fill: =RGBA(246,246,250,1)
+                  FillPortions: =0
+                  Height: =50
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  PaddingLeft: =10
+                  PaddingRight: =23
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - lblCategory:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(131,141,157,1)
+                        Font: =Font.'Lato Light'
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        Size: =8
+                        Text: ="Category"
+                  - lblSubject:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(131,141,157,1)
+                        FillPortions: =2
+                        Font: =Font.'Lato Light'
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        Size: =8
+                        Text: ="Subject"
+                        Width: =75
+                  - lblLocation:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(131,141,157,1)
+                        FillPortions: =1
+                        Font: =Font.'Lato Light'
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =90
+                        Size: =8
+                        Text: ="Location"
+                  - lblStatus:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(131,141,157,1)
+                        FillPortions: =1
+                        Font: =Font.'Lato Light'
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =90
+                        Size: =8
+                        Text: ="Status"
+                  - lblDueDate:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(131,141,157,1)
+                        FillPortions: =1
+                        Font: =Font.'Lato Light'
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =90
+                        Size: =8
+                        Text: ="Due Date"
+                  - Rectangle1:
+                      Control: Rectangle@2.3.0
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Fill: =RGBA(0, 0, 0, 0)
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =50
+                        Width: =30
+            - Container12_TableData:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =1
+                  Height: =Gallery3.Height + Self.PaddingBottom + Self.PaddingTop
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutOverflowY: =LayoutOverflow.Scroll
+                  PaddingLeft: =10
+                  PaddingRight: =23
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - Gallery3:
+                      Control: Gallery@2.15.0
+                      Variant: Vertical
+                      Properties:
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        DelayItemLoading: =false
+                        FillPortions: =0
+                        Height: =Self.AllItemsCount * Self.TemplateHeight
+                        Items: |-
+                          =Table(
+                              {Category: "Design", Subject: "Redesign onboarding flow", Location: "Remote", Status: "In Progress", DueDate: DateValue("03/20/2026")},
+                              {Category: "Engineering", Subject: "Fix login redirect bug", Location: "London Office", Status: "Pending", DueDate: DateValue("03/22/2026")},
+                              {Category: "Marketing", Subject: "Q2 campaign brief", Location: "New York", Status: "Completed", DueDate: DateValue("03/15/2026")},
+                              {Category: "Design", Subject: "Icon set for mobile app", Location: "Remote", Status: "In Progress", DueDate: DateValue("03/28/2026")},
+                              {Category: "Engineering", Subject: "API rate limiting review", Location: "Berlin Office", Status: "Pending", DueDate: DateValue("04/01/2026")}
+                          )
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =0
+                        TemplatePadding: =0
+                        TemplateSize: =45
+                      Children:
+                        - Container11_TableContent_List:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Height: =Parent.TemplateHeight
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Width: =Parent.TemplateWidth
+                            Children:
+                              - container_Category:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =0
+                                    LayoutMinWidth: =150
+                                    PaddingLeft: =4
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =150
+                                  Children:
+                                    - imgIcon:
+                                        Control: Image@2.2.3
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Center
+                                          BorderStyle: =BorderStyle.None
+                                          BorderThickness: =2
+                                          Fill: =RGBA(191, 168, 255,1)
+                                          Height: =30
+                                          Image: |-
+                                            ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                                Substitute(
+                                                    "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><circle cx='8' cy='8' r='8'/></svg>",
+                                                    "currentColor", "RGBA(42, 43, 71,1)"
+                                                )
+                                            )
+                                          PaddingBottom: =8
+                                          PaddingLeft: =8
+                                          PaddingRight: =8
+                                          PaddingTop: =8
+                                          RadiusBottomLeft: =30
+                                          RadiusBottomRight: =30
+                                          RadiusTopLeft: =30
+                                          RadiusTopRight: =30
+                                          Width: =30
+                                    - lblTaskCategory:
+                                        Control: Label@2.5.1
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Stretch
+                                          BorderColor: =RGBA(0, 18, 107, 1)
+                                          Color: =RGBA(35,36,47,1)
+                                          FillPortions: =1
+                                          Font: =Font.Lato
+                                          FontWeight: =FontWeight.Semibold
+                                          LayoutMinHeight: =0
+                                          LayoutMinWidth: =0
+                                          Size: =9
+                                          Text: =ThisItem.Category
+                              - lblTaskSubject:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =RGBA(35,36,47,1)
+                                    FillPortions: =2
+                                    Font: =Font.Lato
+                                    LayoutMinHeight: =0
+                                    Size: =9
+                                    Text: =ThisItem.Subject
+                                    Width: =75
+                              - lblTaskLocation:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =RGBA(35,36,47,1)
+                                    FillPortions: =1
+                                    Font: =Font.Lato
+                                    LayoutMinHeight: =0
+                                    LayoutMinWidth: =100
+                                    Size: =9
+                                    Text: =ThisItem.Location
+                              - container_Status:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =1
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =0
+                                    LayoutMinWidth: =90
+                                    PaddingLeft: =4
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                  Children:
+                                    - textPillContainer:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: AutoLayout
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Center
+                                          BorderColor: =RGBA(191, 168, 255,1)
+                                          BorderThickness: =2
+                                          DropShadow: =DropShadow.None
+                                          Fill: =ColorFade(Self.BorderColor, 80%)
+                                          FillPortions: =0
+                                          Height: =25
+                                          LayoutAlignItems: =LayoutAlignItems.Center
+                                          LayoutDirection: =LayoutDirection.Vertical
+                                          LayoutMinHeight: =16
+                                          LayoutMinWidth: =16
+                                          RadiusBottomLeft: =10
+                                          RadiusBottomRight: =10
+                                          RadiusTopLeft: =10
+                                          RadiusTopRight: =10
+                                          Width: =80
+                                        Children:
+                                          - lblTextPillValue:
+                                              Control: Label@2.5.1
+                                              Properties:
+                                                Align: =Align.Center
+                                                AlignInContainer: =AlignInContainer.Stretch
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Color: =RGBA(35,36,47,1)
+                                                FillPortions: =1
+                                                Font: =Font.Lato
+                                                FontWeight: =FontWeight.Semibold
+                                                Height: =Parent.Height
+                                                LayoutMinHeight: =20
+                                                LayoutMinWidth: =20
+                                                Size: =9
+                                                Text: =ThisItem.Status
+                                                Width: =Parent.Width
+                              - lblFormattedDueDate:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    AlignInContainer: =AlignInContainer.Stretch
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Color: =RGBA(35,36,47,1)
+                                    FillPortions: =1
+                                    Font: =Font.Lato
+                                    LayoutMinHeight: =0
+                                    LayoutMinWidth: =100
+                                    Size: =9
+                                    Text: =Text(ThisItem.DueDate,"mm/dd/yyyy")
+                              - Container18:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: AutoLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    FillPortions: =0
+                                    LayoutDirection: =LayoutDirection.Horizontal
+                                    LayoutMinHeight: =0
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Width: =30
+                                  Children:
+                                    - CustomButton_7:
+                                        Control: GroupContainer@1.5.0
+                                        Variant: ManualLayout
+                                        Properties:
+                                          AlignInContainer: =AlignInContainer.Center
+                                          DropShadow: =DropShadow.None
+                                          Fill: =RGBA(42, 43, 71,1)
+                                          FillPortions: =0
+                                          Height: =25
+                                          RadiusBottomLeft: =10
+                                          RadiusBottomRight: =10
+                                          RadiusTopLeft: =10
+                                          RadiusTopRight: =10
+                                          Width: =25
+                                        Children:
+                                          - img_RightIconSmall:
+                                              Control: Image@2.2.3
+                                              Properties:
+                                                BorderColor: =RGBA(0, 18, 107, 1)
+                                                Height: =Parent.Height
+                                                Image: |-
+                                                  ="data:image/svg+xml;utf8, "&EncodeUrl(
+                                                      Substitute(
+                                                          "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-right-short' viewBox='0 0 16 16'>
+                                                    <path fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/>
+                                                  </svg>",
+                                                          "currentColor", "RGBA(246,246,250,1)"
+                                                      )
+                                                  )
+                                                PaddingBottom: =3
+                                                PaddingTop: =3
+                                                Width: =Parent.Width
+                                                Y: =(Parent.Height - Self.Height)/2
+                                          - btnViewSingleItem:
+                                              Control: Classic/Button@2.2.0
+                                              Properties:
+                                                BorderColor: =ColorFade(Self.Fill, -15%)
+                                                BorderStyle: =BorderStyle.None
+                                                Color: =RGBA(255, 255, 255, 1)
+                                                DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                                                Fill: =RGBA(0, 0, 0, 0)
+                                                Font: =Font.'Open Sans'
+                                                Height: =Parent.Height
+                                                HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                                                HoverColor: =RGBA(255, 255, 255, 1)
+                                                HoverFill: =RGBA(0,0,0,0.1)
+                                                PressedBorderColor: =Self.Fill
+                                                PressedColor: =Self.Fill
+                                                PressedFill: =RGBA(0,0,0,0.2)
+                                                Text: =""
+                                                Width: =Parent.Width
+                        - rectDivider:
+                            Control: Rectangle@2.3.0
+                            Properties:
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Fill: =RGBA(246,246,250,1)
+                              Height: =1
+                              OnSelect: =Select(Parent)
+                              Width: =Parent.TemplateWidth
+                              Y: =Parent.TemplateHeight - Self.Height

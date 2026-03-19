@@ -1,0 +1,10 @@
+{
+  "name": "canvas-apps-tools",
+  "plugins": [
+    {
+      "name": "canvas-apps-tools",
+      "version": "1.0.0",
+      "description": "Generate paste-ready Power Apps Canvas App YAML from screenshots, mockups, or text descriptions."
+    }
+  ]
+}

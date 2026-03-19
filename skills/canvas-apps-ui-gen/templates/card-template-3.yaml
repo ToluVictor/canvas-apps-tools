@@ -1,0 +1,231 @@
+# TEMPLATE: Category Cards with Progress Bar (2x2 grid / wrapped)
+# TAGS: cards, category, progress, gallery, grid, wrap, wrapcount, 2x2, icon, badge
+# DESCRIPTION: Same card design as card-template-2 but using WrapCount: =2 to arrange cards in a 2-column grid instead of a single horizontal row. Each card has colored background, large icon, title, completion count, and progress bar.
+# USE WHEN: When you have 4-8 category cards and want a 2-column grid layout rather than a horizontal row. Good for tablet screens where a single row of 4+ cards would be too narrow.
+# COMPONENTS: GroupContainer@1.5.0, Gallery@2.15.0, Image@2.2.3, Label@2.5.1, Classic/Button@2.2.0
+# ============================================
+- Container_Cards_4:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Height: =308
+      LayoutDirection: =LayoutDirection.Horizontal
+      RadiusBottomLeft: =0
+      RadiusBottomRight: =0
+      RadiusTopLeft: =0
+      RadiusTopRight: =0
+      Width: =Parent.Width
+      Y: =428
+    Children:
+      - rightGallery1_2:
+          Control: Gallery@2.15.0
+          Variant: Horizontal
+          Properties:
+            BorderColor: =RGBA(0, 18, 107, 1)
+            FillPortions: =3
+            Items: |-
+              =//OverviewTable
+              Table(
+                  {
+                      ID: "01",
+                      Color: RGBA(191, 168, 255,1),
+                      Icon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-grid-fill' viewBox='0 0 16 16'><path d='M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z'/></svg>",
+                      Text: "General Safety",
+                      TotalCompleted: 50,
+                      Total: 69
+                  },
+                  {
+                      ID: "02",
+                      Color: RGBA(254, 230, 194,1),
+                      Icon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16'/></svg>",
+                      Text: "Fire Safety",
+                      TotalCompleted: 5,
+                      Total: 18
+                  },
+                  {
+                      ID: "03",
+                      Color: RGBA(237, 250, 84,1),
+                      Icon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M11.251.068a.5.5 0 0 1 .227.58L9.677 6.5H13a.5.5 0 0 1 .364.843l-8 8.5a.5.5 0 0 1-.842-.49L6.323 9.5H3a.5.5 0 0 1-.364-.843l8-8.5a.5.5 0 0 1 .615-.09z'/></svg>",
+                      Text: "Electrical Safety",
+                      TotalCompleted: 12,
+                      Total: 16
+                  },
+                  {
+                      ID: "04",
+                      Color: RGBA(82, 222, 229,1),
+                      Icon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-fill' viewBox='0 0 16 16'><path d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6'/></svg>",
+                      Text: "Ward Inspection",
+                      TotalCompleted: 6,
+                      Total: 10
+                  }
+              )
+            LayoutMinHeight: =215
+            LayoutMinWidth: =400
+            TemplatePadding: =0
+            TemplateSize: =Self.Width/2
+            WrapCount: =2
+          Children:
+            - rootContainer3_2:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  BorderColor: =Color.White
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =2
+                  DropShadow: =DropShadow.None
+                  Fill: =ThisItem.Color
+                  Height: =Parent.TemplateHeight * 90%
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  LayoutJustifyContent: =LayoutJustifyContent.Center
+                  PaddingBottom: =20
+                  PaddingLeft: =20
+                  PaddingRight: =20
+                  PaddingTop: =20
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Width: =Parent.TemplateWidth * 90%
+                  X: =(Parent.TemplateWidth - Self.Width)/2
+                  Y: =(Parent.TemplateHeight - Self.Height)/2
+                Children:
+                  - Container6_4:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Height: =50
+                        LayoutDirection: =LayoutDirection.Horizontal
+                        LayoutJustifyContent: =LayoutJustifyContent.SpaceBetween
+                        LayoutMinHeight: =45
+                        LayoutMinWidth: =0
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =Parent.Width
+                      Children:
+                        - Image1_8:
+                            Control: Image@2.2.3
+                            Properties:
+                              AlignInContainer: =AlignInContainer.End
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              BorderStyle: =BorderStyle.None
+                              Height: =45
+                              Image: |-
+                                ="data:image/svg+xml;utf8, "&EncodeUrl(
+                                    Substitute(
+                                        ThisItem.Icon,
+                                        "currentColor", "RGBA(42, 43, 71,1)"
+                                    )
+                                )
+                              Width: =45
+                        - CustomButton_5:
+                            Control: GroupContainer@1.5.0
+                            Variant: ManualLayout
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Start
+                              DropShadow: =DropShadow.None
+                              Fill: =RGBA(42, 43, 71,1)
+                              FillPortions: =0
+                              Height: =25
+                              RadiusBottomLeft: =35
+                              RadiusBottomRight: =35
+                              RadiusTopLeft: =35
+                              RadiusTopRight: =35
+                              Width: =25
+                            Children:
+                              - Image1_9:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Height: =Parent.Height
+                                    Image: |-
+                                      ="data:image/svg+xml;utf8, "&EncodeUrl(
+                                          Substitute(
+                                              "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-arrow-right-short' viewBox='0 0 16 16'>
+                                        <path fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/>
+                                      </svg>
+                                              ",
+                                              "currentColor", "RGBA(246,246,250,1)"
+                                          )
+                                      )
+                                    Width: =Parent.Width
+                              - Button1_5:
+                                  Control: Classic/Button@2.2.0
+                                  Properties:
+                                    BorderColor: =ColorFade(Self.Fill, -15%)
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(255, 255, 255, 1)
+                                    DisabledBorderColor: =RGBA(166, 166, 166, 1)
+                                    Fill: =RGBA(0, 0, 0, 0)
+                                    Font: =Font.'Open Sans'
+                                    Height: =Parent.Height
+                                    HoverBorderColor: =ColorFade(Self.BorderColor, 20%)
+                                    HoverColor: =RGBA(255, 255, 255, 1)
+                                    HoverFill: =RGBA(0,0,0,0.1)
+                                    PressedBorderColor: =Self.Fill
+                                    PressedColor: =Self.Fill
+                                    PressedFill: =RGBA(0,0,0,0.2)
+                                    Text: =""
+                                    Width: =Parent.Width
+                  - Label1_8:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(35,36,47,1)
+                        Font: =Font.Lato
+                        FontWeight: =FontWeight.Semibold
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =80
+                        PaddingLeft: =0
+                        Size: =12
+                        Text: =ThisItem.Text
+                        VerticalAlign: =VerticalAlign.Top
+                        Width: =Parent.Width
+                  - Label1_9:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        BorderColor: =RGBA(0, 18, 107, 1)
+                        Color: =RGBA(35,36,47,1)
+                        Font: =Font.Lato
+                        Height: =30
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =80
+                        PaddingLeft: =0
+                        PaddingTop: =10
+                        Size: =9
+                        Text: |-
+                          =$"{ThisItem.TotalCompleted} Tasks | {Text(ThisItem.TotalCompleted/ThisItem.Total * 100,"##")}%"
+                        Width: =Parent.Width
+                  - CustomProgessBarContainer7_2:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Fill: =RGBA(0, 0, 0, 0.2)
+                        FillPortions: =0
+                        Height: =4
+                        LayoutMinWidth: =0
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Width: =Parent.Width
+                      Children:
+                        - Container7_3:
+                            Control: GroupContainer@1.5.0
+                            Variant: ManualLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Fill: =RGBA(42, 43, 71,1)
+                              Height: =Parent.Height
+                              RadiusBottomLeft: =10
+                              RadiusBottomRight: =10
+                              RadiusTopLeft: =10
+                              RadiusTopRight: =10
+                              Width: =Parent.Width * (ThisItem.TotalCompleted/ThisItem.Total)

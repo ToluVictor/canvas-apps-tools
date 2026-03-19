@@ -1,0 +1,386 @@
+# TEMPLATE: sidebar-collapsible
+# TAGS: sidebar, navigation, nav, menu, collapsible, hamburger, drawer, side-nav
+# USE WHEN: app layout with a left-side navigation panel that can expand/collapse
+# NOTES:
+#   - Entire collapse state driven by single boolean variable: varMenuExpanded
+#   - Set initial state in screen OnVisible: Set(varMenuExpanded, false); Set(CurrentMenuID, 1)
+#   - Sidebar width switches between 60px (collapsed) and 200px (expanded)
+#   - Nav items stored as inline Table() in gallery Items — add/remove rows as needed
+#   - Active item tracked by CurrentMenuID integer variable
+#   - Replace screen references in PageNavigation fields with your actual screen names
+#   - Replace SVG path data with real icons (Bootstrap Icons recommended)
+#   - This is a SECTION template — paste as a child of your main horizontal screen container
+
+# Screen OnVisible (paste into your screen's OnVisible property):
+# =Set(varMenuExpanded, false); Set(CurrentMenuID, 1)
+
+- sidebarContainer:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =Color.White
+      FillPortions: =0
+      Height: =Parent.Height
+      LayoutDirection: =LayoutDirection.Horizontal
+      RadiusBottomLeft: =0
+      RadiusBottomRight: =0
+      RadiusTopLeft: =0
+      RadiusTopRight: =0
+      Width: =If(varMenuExpanded, 200, 60)
+    Children:
+      - sidebarInner:
+          Control: GroupContainer@1.5.0
+          Variant: AutoLayout
+          Properties:
+            DropShadow: =DropShadow.None
+            Fill: =Color.White
+            Height: =Parent.Height
+            LayoutDirection: =LayoutDirection.Vertical
+            LayoutGap: =10
+            LayoutMinHeight: =0
+            LayoutMinWidth: =0
+            PaddingBottom: =36
+            PaddingTop: =36
+            RadiusBottomLeft: =0
+            RadiusBottomRight: =0
+            RadiusTopLeft: =0
+            RadiusTopRight: =0
+            Width: =Parent.Width
+          Children:
+            - sidebarLogo:
+                Control: Image@2.2.3
+                Properties:
+                  AlignInContainer: =AlignInContainer.Center
+                  BorderColor: =RGBA(0,0,0,0)
+                  BorderStyle: =BorderStyle.None
+                  BorderThickness: =2
+                  DisabledBorderColor: =RGBA(0,0,0,0)
+                  DisabledFill: =RGBA(0,0,0,0)
+                  FocusedBorderThickness: =4
+                  Height: =30
+                  HoverBorderColor: =RGBA(0,0,0,0)
+                  HoverFill: =RGBA(0,0,0,0)
+                  PaddingBottom: =3
+                  PaddingTop: =3
+                  PressedBorderColor: =RGBA(0,0,0,0)
+                  PressedFill: =RGBA(0,0,0,0)
+                  Image: =If(varMenuExpanded, 'AppLogoFull', 'AppLogoIcon')
+            - hamburgerContainer:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  Height: =35
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutJustifyContent: =If(varMenuExpanded, LayoutJustifyContent.Start, LayoutJustifyContent.Center)
+                  LayoutMinWidth: =0
+                  PaddingLeft: =If(varMenuExpanded, 10, 0)
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - hamburgerButton:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        FillPortions: =0
+                        Height: =35
+                        LayoutMinHeight: =35
+                        RadiusBottomLeft: =10
+                        RadiusBottomRight: =10
+                        RadiusTopLeft: =10
+                        RadiusTopRight: =10
+                        Width: =35
+                      Children:
+                        - hamburgerIcon:
+                            Control: Image@2.2.3
+                            Properties:
+                              BorderColor: =RGBA(0,0,0,0)
+                              BorderStyle: =BorderStyle.None
+                              BorderThickness: =2
+                              DisabledBorderColor: =RGBA(0,0,0,0)
+                              DisabledFill: =RGBA(0,0,0,0)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height
+                              HoverBorderColor: =RGBA(0,0,0,0)
+                              HoverFill: =RGBA(0,0,0,0)
+                              PaddingBottom: =5
+                              PaddingTop: =5
+                              PressedBorderColor: =RGBA(0,0,0,0)
+                              PressedFill: =RGBA(0,0,0,0)
+                              Width: =Parent.Width
+                              Image: |-
+                                ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                    Substitute(
+                                        "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-list' viewBox='0 0 16 16'>
+                                  <path fill-rule='evenodd' d='M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z'/>
+                                </svg>",
+                                        "currentColor", "RGBA(42,43,71,1)"
+                                    )
+                                )
+                        - hamburgerOverlay:
+                            Control: Classic/Button@2.2.0
+                            Properties:
+                              BorderColor: =RGBA(0,0,0,0)
+                              BorderStyle: =BorderStyle.None
+                              Color: =RGBA(42,43,71,1)
+                              DisabledBorderColor: =RGBA(0,0,0,0)
+                              Fill: =RGBA(0,0,0,0)
+                              FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+                              FocusedBorderThickness: =4
+                              Height: =Parent.Height
+                              HoverBorderColor: =RGBA(0,0,0,0)
+                              HoverColor: =RGBA(42,43,71,1)
+                              HoverFill: =RGBA(0,0,0,0.08)
+                              OnSelect: =Set(varMenuExpanded, !varMenuExpanded)
+                              PressedBorderColor: =ColorFade(RGBA(0,188,242,1), 50%)
+                              PressedColor: =RGBA(42,43,71,1)
+                              PressedFill: =RGBA(0,0,0,0.16)
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Text: =""
+                              Width: =Parent.Width
+            - navGallery:
+                Control: Gallery@2.15.0
+                Variant: Vertical
+                Properties:
+                  BorderColor: =RGBA(0,0,0,0)
+                  DelayItemLoading: =false
+                  Height: =Self.AllItemsCount * (Self.TemplateHeight + Self.TemplatePadding)
+                  LayoutMinHeight: =0
+                  LayoutMinWidth: =0
+                  TemplatePadding: =0
+                  TemplateSize: =60
+                  Items: |-
+                    =Table(
+                        {
+                            MenuIcon_Selected: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146z'/></svg>",
+                            MenuIcon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5zM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5z'/></svg>",
+                            MenuName: "Home",
+                            MenuID: 1,
+                            PageNavigation: App.ActiveScreen
+                        },
+                        {
+                            MenuIcon_Selected: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zM2 3a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 0-1h-11A.5.5 0 0 0 2 3m2-2a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 0-1h-7A.5.5 0 0 0 4 1'/></svg>",
+                            MenuIcon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5z'/></svg>",
+                            MenuName: "Tasks",
+                            MenuID: 2,
+                            PageNavigation: App.ActiveScreen
+                        },
+                        {
+                            MenuIcon_Selected: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6'/></svg>",
+                            MenuIcon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z'/></svg>",
+                            MenuName: "Profile",
+                            MenuID: 3,
+                            PageNavigation: App.ActiveScreen
+                        },
+                        {
+                            MenuIcon_Selected: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z'/></svg>",
+                            MenuIcon: "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'><path d='M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z'/><path d='M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319z'/></svg>",
+                            MenuName: "Settings",
+                            MenuID: 4,
+                            PageNavigation: App.ActiveScreen
+                        }
+                    )
+                Children:
+                  - navItemTemplate:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        DropShadow: =DropShadow.None
+                        Height: =Parent.TemplateHeight
+                        RadiusBottomLeft: =0
+                        RadiusBottomRight: =0
+                        RadiusTopLeft: =0
+                        RadiusTopRight: =0
+                        Width: =Parent.TemplateWidth
+                      Children:
+                        - navItemBackground:
+                            Control: GroupContainer@1.5.0
+                            Variant: ManualLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              Fill: =If(CurrentMenuID = ThisItem.MenuID, RGBA(240,239,248,1), RGBA(0,0,0,0))
+                              Height: =Parent.Height * 80%
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                              Width: =Parent.Width
+                              Y: =(Parent.Height - Self.Height)/2
+                            Children:
+                              - navItemIcon:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    BorderStyle: =BorderStyle.None
+                                    BorderThickness: =2
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    DisabledFill: =RGBA(0,0,0,0)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    HoverFill: =RGBA(0,0,0,0)
+                                    PaddingBottom: =14
+                                    PaddingTop: =14
+                                    PressedBorderColor: =RGBA(0,0,0,0)
+                                    PressedFill: =RGBA(0,0,0,0)
+                                    Width: =Self.Height
+                                    X: =If(varMenuExpanded, 5, (Parent.Width - Self.Width)/2)
+                                    Image: |-
+                                      ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                          Substitute(
+                                              If(
+                                                  CurrentMenuID = ThisItem.MenuID,
+                                                  ThisItem.MenuIcon_Selected,
+                                                  ThisItem.MenuIcon
+                                              ),
+                                              "currentColor",
+                                              If(
+                                                  CurrentMenuID = ThisItem.MenuID,
+                                                  "RGBA(42,43,71,1)",
+                                                  "RGBA(192,194,197,1)"
+                                              )
+                                          )
+                                      )
+                              - navItemLabel:
+                                  Control: Label@2.5.1
+                                  Properties:
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =If(CurrentMenuID = ThisItem.MenuID, RGBA(42,43,71,1), RGBA(192,194,197,1))
+                                    Font: =Font.Lato
+                                    FontWeight: =FontWeight.Semibold
+                                    Height: =Parent.Height
+                                    LayoutMinHeight: =0
+                                    LayoutMinWidth: =0
+                                    Size: =If(CurrentMenuID = ThisItem.MenuID, 10, 9)
+                                    Text: =ThisItem.MenuName
+                                    Visible: =varMenuExpanded
+                                    Width: =Parent.Width - Self.X
+                                    X: =navItemIcon.Width + navItemIcon.X
+                              - navItemOverlay:
+                                  Control: Classic/Button@2.2.0
+                                  Properties:
+                                    BorderColor: =RGBA(0,0,0,0)
+                                    BorderStyle: =BorderStyle.None
+                                    Color: =RGBA(42,43,71,1)
+                                    DisabledBorderColor: =RGBA(0,0,0,0)
+                                    Fill: =RGBA(0,0,0,0)
+                                    FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+                                    FocusedBorderThickness: =4
+                                    Height: =Parent.Height
+                                    HoverBorderColor: =RGBA(0,0,0,0)
+                                    HoverColor: =RGBA(42,43,71,1)
+                                    HoverFill: =RGBA(0,0,0,0.06)
+                                    OnSelect: |-
+                                      =Set(CurrentMenuID, ThisItem.MenuID);
+                                      Navigate(ThisItem.PageNavigation)
+                                    PressedBorderColor: =ColorFade(RGBA(0,188,242,1), 50%)
+                                    PressedColor: =RGBA(42,43,71,1)
+                                    PressedFill: =RGBA(0,0,0,0.12)
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =0
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =0
+                                    Text: =""
+                                    Width: =Parent.Width
+                              - navActiveBar:
+                                  Control: GroupContainer@1.5.0
+                                  Variant: ManualLayout
+                                  Properties:
+                                    DropShadow: =DropShadow.None
+                                    Fill: =RGBA(42,43,71,1)
+                                    Height: =Parent.Height * 80%
+                                    RadiusBottomLeft: =0
+                                    RadiusBottomRight: =20
+                                    RadiusTopLeft: =0
+                                    RadiusTopRight: =20
+                                    Visible: =CurrentMenuID = ThisItem.MenuID
+                                    Width: =5
+                                    Y: =(Parent.Height - Self.Height)/2
+            - sidebarDivider:
+                Control: Rectangle@2.3.0
+                Properties:
+                  AlignInContainer: =AlignInContainer.Stretch
+                  Fill: =RGBA(214,221,224,1)
+                  FillPortions: =0
+                  Height: =1
+                  LayoutMinHeight: =0
+                  LayoutMinWidth: =0
+                  Width: =Parent.Width
+            - profileContainer:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  FillPortions: =0
+                  Height: =50
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Horizontal
+                  LayoutJustifyContent: =LayoutJustifyContent.Center
+                  LayoutMinWidth: =0
+                  PaddingLeft: =10
+                  PaddingRight: =10
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                Children:
+                  - profileAvatar:
+                      Control: GroupContainer@1.5.0
+                      Variant: ManualLayout
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Center
+                        BorderColor: =RGBA(42,43,71,1)
+                        BorderThickness: =2
+                        DropShadow: =DropShadow.None
+                        FillPortions: =0
+                        Height: =Self.Width
+                        RadiusBottomLeft: =20
+                        RadiusBottomRight: =20
+                        RadiusTopLeft: =20
+                        RadiusTopRight: =20
+                        Width: =35
+                      Children:
+                        - profilePhoto:
+                            Control: Image@2.2.3
+                            Properties:
+                              BorderColor: =RGBA(0,0,0,0)
+                              BorderStyle: =BorderStyle.None
+                              DisabledBorderColor: =RGBA(0,0,0,0)
+                              DisabledFill: =RGBA(0,0,0,0)
+                              Height: =Parent.Height
+                              HoverBorderColor: =RGBA(0,0,0,0)
+                              HoverFill: =RGBA(0,0,0,0)
+                              Image: =User().Image
+                              PressedBorderColor: =RGBA(0,0,0,0)
+                              PressedFill: =RGBA(0,0,0,0)
+                              RadiusBottomLeft: =20
+                              RadiusBottomRight: =20
+                              RadiusTopLeft: =20
+                              RadiusTopRight: =20
+                              Width: =Parent.Width
+                              X: =(Parent.Width - Self.Width)/2
+                              Y: =(Parent.Height - Self.Height)/2
+                  - profileName:
+                      Control: Label@2.5.1
+                      Properties:
+                        AlignInContainer: =AlignInContainer.Stretch
+                        Color: =RGBA(42,43,71,1)
+                        FillPortions: =1
+                        Font: =Font.Lato
+                        FontWeight: =FontWeight.Semibold
+                        Height: =Parent.Height
+                        LayoutMinHeight: =0
+                        LayoutMinWidth: =0
+                        Size: =9
+                        Text: =User().FullName
+                        Visible: =varMenuExpanded
+                        Width: =Parent.Width - Self.X

@@ -1,0 +1,185 @@
+# TEMPLATE: KPI Metric Cards (Simple)
+# TAGS: cards, kpi, metric, gallery, summary, dashboard, horizontal, icon, value
+# DESCRIPTION: Horizontal gallery of 4 KPI metric cards. Each card shows an icon container, a card name label, and a large primary value. Uses the 3-level gallery nesting pattern (imgTemplateBG + rootContainer + galCardTemplate) with alternating dark background and blue accent colors.
+# USE WHEN: Dashboard summary rows with 3-6 KPI metrics or category summaries showing a single primary value. Best for simple "here's the number" cards.
+# COMPONENTS: GroupContainer@1.5.0, Gallery@2.15.0, Image@2.2.3, Label@2.5.1
+# ============================================
+- Container_Cards_1:
+    Control: GroupContainer@1.5.0
+    Variant: AutoLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Height: =205
+      LayoutDirection: =LayoutDirection.Horizontal
+      RadiusBottomLeft: =0
+      RadiusBottomRight: =0
+      RadiusTopLeft: =0
+      RadiusTopRight: =0
+      Width: =Parent.Width
+    Children:
+      - gal_Card_1:
+          Control: Gallery@2.15.0
+          Variant: Horizontal
+          Properties:
+            BorderColor: =RGBA(0, 18, 107, 1)
+            DelayItemLoading: =false
+            Items: |-
+              =//OverviewCards_Data
+              Table(
+                  {
+                      CardName: "Total Lease Costs",
+                      Icon: "
+                      <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-cash' viewBox='0 0 16 16'>
+                <path d='M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4'/>
+                <path d='M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2z'/>
+              </svg>
+                      ",
+                      Value: "$79,520",
+                      BG_Image:'BG 1',
+                      BG_Color: RGBA(35,36,47,1)
+                  },
+                  {
+                      CardName: "Total Active Leases",
+                      Icon: "
+                      <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-person-fill' viewBox='0 0 16 16'>
+                <path d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6'/>
+              </svg>
+                      ",
+                      Value: 345,
+                      BG_Image:'BG 2',
+                      BG_Color: RGBA(0,142,210,1)
+                  },
+                  {
+                      CardName: "Most Leased Make",
+                      Icon: "
+                      <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-car-front-fill' viewBox='0 0 16 16'>
+                <path d='M2.52 3.515A2.5 2.5 0 0 1 4.82 2h6.362c1 0 1.904.596 2.298 1.515l.792 1.848c.075.175.21.319.38.404.5.25.855.715.965 1.262l.335 1.679q.05.242.049.49v.413c0 .814-.39 1.543-1 1.997V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.338c-1.292.048-2.745.088-4 .088s-2.708-.04-4-.088V13.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-1.892c-.61-.454-1-1.183-1-1.997v-.413a2.5 2.5 0 0 1 .049-.49l.335-1.68c.11-.546.465-1.012.964-1.261a.8.8 0 0 0 .381-.404l.792-1.848ZM3 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2m10 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2M6 8a1 1 0 0 0 0 2h4a1 1 0 1 0 0-2zM2.906 5.189a.51.51 0 0 0 .497.731c.91-.073 3.35-.17 4.597-.17s3.688.097 4.597.17a.51.51 0 0 0 .497-.731l-.956-1.913A.5.5 0 0 0 11.691 3H4.309a.5.5 0 0 0-.447.276L2.906 5.19Z'/>
+              </svg>
+                      ",
+                      Value: "TOYOTA",
+                      BG_Image:'BG 4',
+                      BG_Color: RGBA(35,36,47,1)
+                  },
+                  {
+                      CardName: "Total Lease Deposits",
+                      Icon: "
+                      <svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' class='bi bi-wallet-fill' viewBox='0 0 16 16'>
+                <path d='M1.5 2A1.5 1.5 0 0 0 0 3.5v2h6a.5.5 0 0 1 .5.5c0 .253.08.644.306.958.207.288.557.542 1.194.542s.987-.254 1.194-.542C9.42 6.644 9.5 6.253 9.5 6a.5.5 0 0 1 .5-.5h6v-2A1.5 1.5 0 0 0 14.5 2z'/>
+                <path d='M16 6.5h-5.551a2.7 2.7 0 0 1-.443 1.042C9.613 8.088 8.963 8.5 8 8.5s-1.613-.412-2.006-.958A2.7 2.7 0 0 1 5.551 6.5H0v6A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5z'/>
+              </svg>
+                      ",
+                      Value: "$102,600",
+                      BG_Image:'BG 3',
+                      BG_Color: RGBA(0,142,210,1)
+                  }
+              )
+            LayoutMinHeight: =0
+            LayoutMinWidth: =0
+            TemplatePadding: =0
+            TemplateSize: =Self.Width/4
+            Transition: =Transition.Pop
+          Children:
+            - imgTemplateBG_1:
+                Control: Image@2.2.3
+                Properties:
+                  BorderColor: =RGBA(0, 18, 107, 1)
+                  Fill: =ThisItem.BG_Color
+                  Height: =gal_Card_Template_1.Height
+                  Image: =ThisItem.BG_Image
+                  ImagePosition: =ImagePosition.Fill
+                  OnSelect: =Select(Parent)
+                  RadiusBottomLeft: =20
+                  RadiusBottomRight: =20
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Width: =gal_Card_Template_1.Width
+                  X: =gal_Card_Template_1.X
+                  Y: =gal_Card_Template_1.Y
+            - rootContainer_2:
+                Control: GroupContainer@1.5.0
+                Variant: AutoLayout
+                Properties:
+                  DropShadow: =DropShadow.None
+                  Height: =Parent.TemplateHeight
+                  LayoutAlignItems: =LayoutAlignItems.Center
+                  LayoutDirection: =LayoutDirection.Vertical
+                  PaddingBottom: =15
+                  PaddingLeft: =15
+                  PaddingRight: =15
+                  PaddingTop: =15
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =0
+                  RadiusTopRight: =0
+                  Width: =Parent.TemplateWidth
+                Children:
+                  - gal_Card_Template_1:
+                      Control: GroupContainer@1.5.0
+                      Variant: AutoLayout
+                      Properties:
+                        Height: =100
+                        LayoutDirection: =LayoutDirection.Vertical
+                        PaddingBottom: =25
+                        PaddingLeft: =20
+                        PaddingRight: =20
+                        PaddingTop: =20
+                        RadiusBottomLeft: =20
+                        RadiusBottomRight: =20
+                        RadiusTopLeft: =20
+                        RadiusTopRight: =20
+                        Width: =100
+                      Children:
+                        - Container_line1_1:
+                            Control: GroupContainer@1.5.0
+                            Variant: AutoLayout
+                            Properties:
+                              DropShadow: =DropShadow.None
+                              LayoutDirection: =LayoutDirection.Horizontal
+                              LayoutMinHeight: =50
+                              PaddingLeft: =5
+                              RadiusBottomLeft: =0
+                              RadiusBottomRight: =0
+                              RadiusTopLeft: =0
+                              RadiusTopRight: =0
+                            Children:
+                              - Image4_1:
+                                  Control: Image@2.2.3
+                                  Properties:
+                                    BorderColor: =RGBA(0, 18, 107, 1)
+                                    Fill: =RGBA(255, 255, 255, 0.5)
+                                    Height: =35
+                                    Image: |-
+                                      ="data:image/svg+xml;utf8, " & EncodeUrl(
+                                          Substitute(
+                                              ThisItem.Icon, "currentColor", "RGBA(246,246,250,1)"
+                                          )
+                                      )
+                                    PaddingBottom: =8
+                                    PaddingTop: =8
+                                    RadiusBottomLeft: =10
+                                    RadiusBottomRight: =10
+                                    RadiusTopLeft: =10
+                                    RadiusTopRight: =10
+                                    Width: =35
+                        - lblCardTitle_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =RGBA(246,246,250,1)
+                              Font: =Font.Lato
+                              Height: =18
+                              LayoutMinWidth: =0
+                              Size: =9
+                              Text: =ThisItem.CardName
+                        - lblCardValue_1:
+                            Control: Label@2.5.1
+                            Properties:
+                              AlignInContainer: =AlignInContainer.Stretch
+                              BorderColor: =RGBA(0, 18, 107, 1)
+                              Color: =RGBA(246,246,250,1)
+                              Font: =Font.'Lato Black'
+                              FontWeight: =FontWeight.Bold
+                              LayoutMinWidth: =0
+                              Size: =22
+                              Text: =ThisItem.Value

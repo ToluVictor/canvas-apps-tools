@@ -1,0 +1,219 @@
+# TEMPLATE: custom-button
+# TAGS: button, icon-button, action, click, interactive, cta, call-to-action
+# USE WHEN: any clickable button with a label and/or icon; row action buttons; header action buttons
+# VARIANTS: primary (dark fill), secondary (white fill + border), icon-only (25x25 circle)
+# NOTES:
+#   - Pattern: ManualLayout container (styled shell) + Label + SVG Image + transparent Classic/Button overlay
+#   - The overlay button handles ALL interaction (hover, press, focus, OnSelect)
+#   - The container handles visual appearance (fill, radius, shadow)
+#   - PaddingLeft on label = 5 + icon.X + icon.Width to clear the icon
+#   - Replace <SVG_PATH_DATA> with actual SVG path d="..." content
+#   - Replace RGBA icon color in Substitute() with desired icon tint
+
+# ─────────────────────────────────────────────
+# VARIANT A: Primary button (dark fill, light text, icon left)
+# ─────────────────────────────────────────────
+- primaryButton:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =RGBA(42,43,71,1)
+      Height: =35
+      Width: =150
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+    Children:
+      - primaryBtnLabel:
+          Control: Label@2.5.1
+          Properties:
+            Color: =Color.White
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Semibold
+            Height: =Parent.Height
+            Width: =Parent.Width
+            Size: =10
+            PaddingLeft: =5 + primaryBtnIcon.X + primaryBtnIcon.Width
+            Text: ="Button Label"
+      - primaryBtnIcon:
+          Control: Image@2.2.3
+          Properties:
+            Height: =25
+            Width: =25
+            X: =10
+            Y: =(Parent.Height - Self.Height)/2
+            BorderColor: =RGBA(0,0,0,0)
+            BorderStyle: =BorderStyle.None
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            DisabledFill: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0)
+            PressedBorderColor: =RGBA(0,0,0,0)
+            PressedFill: =RGBA(0,0,0,0)
+            Image: |-
+              ="data:image/svg+xml;utf8, " & EncodeUrl(
+                  Substitute(
+                      "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                <path d='M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z'/>
+              </svg>",
+                      "currentColor", "RGBA(246,246,250,1)"
+                  )
+              )
+      - primaryBtnOverlay:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0.08)
+            PressedFill: =RGBA(0,0,0,0.16)
+            Color: =RGBA(255,255,255,1)
+            HoverColor: =RGBA(255,255,255,1)
+            PressedColor: =RGBA(255,255,255,1)
+            BorderStyle: =BorderStyle.None
+            BorderColor: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            PressedBorderColor: =ColorFade(RGBA(0,188,242,1), 50%)
+            FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+            FocusedBorderThickness: =4
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            Height: =Parent.Height
+            Width: =Parent.Width
+            OnSelect: =false
+
+# ─────────────────────────────────────────────
+# VARIANT B: Secondary button (white fill, dark text, dark border)
+# ─────────────────────────────────────────────
+- secondaryButton:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =Color.White
+      BorderColor: =RGBA(42,43,71,1)
+      BorderThickness: =1
+      Height: =35
+      Width: =150
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+    Children:
+      - secondaryBtnLabel:
+          Control: Label@2.5.1
+          Properties:
+            Align: =Align.Center
+            Color: =RGBA(42,43,71,1)
+            Font: =Font.Lato
+            FontWeight: =FontWeight.Semibold
+            Height: =Parent.Height
+            Width: =Parent.Width
+            PaddingRight: =35
+            Size: =10
+            Text: ="View All"
+      - secondaryBtnIcon:
+          Control: Image@2.2.3
+          Properties:
+            Height: =25
+            Width: =25
+            X: =110
+            Y: =(Parent.Height - Self.Height)/2
+            BorderColor: =RGBA(0,0,0,0)
+            BorderStyle: =BorderStyle.None
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            DisabledFill: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0)
+            PressedBorderColor: =RGBA(0,0,0,0)
+            PressedFill: =RGBA(0,0,0,0)
+            Image: |-
+              ="data:image/svg+xml;utf8, " & EncodeUrl(
+                  Substitute(
+                      "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                <path fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/>
+              </svg>",
+                      "currentColor", "RGBA(42,43,71,1)"
+                  )
+              )
+      - secondaryBtnOverlay:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0.06)
+            PressedFill: =RGBA(0,0,0,0.12)
+            Color: =RGBA(42,43,71,1)
+            HoverColor: =RGBA(42,43,71,1)
+            PressedColor: =RGBA(42,43,71,1)
+            BorderStyle: =BorderStyle.None
+            BorderColor: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            PressedBorderColor: =RGBA(0,0,0,0)
+            FocusedBorderColor: =ColorFade(RGBA(42,43,71,1), 60%)
+            FocusedBorderThickness: =4
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            Height: =Parent.Height
+            Width: =Parent.Width
+            OnSelect: =false
+
+# ─────────────────────────────────────────────
+# VARIANT C: Icon-only button (25×25 rounded square, for row actions)
+# ─────────────────────────────────────────────
+- iconOnlyButton:
+    Control: GroupContainer@1.5.0
+    Variant: ManualLayout
+    Properties:
+      DropShadow: =DropShadow.None
+      Fill: =RGBA(42,43,71,1)
+      Height: =25
+      Width: =25
+      RadiusBottomLeft: =10
+      RadiusBottomRight: =10
+      RadiusTopLeft: =10
+      RadiusTopRight: =10
+    Children:
+      - iconOnlyImg:
+          Control: Image@2.2.3
+          Properties:
+            Height: =Parent.Height
+            Width: =Parent.Width
+            PaddingTop: =3
+            PaddingBottom: =3
+            BorderColor: =RGBA(0,0,0,0)
+            BorderStyle: =BorderStyle.None
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            DisabledFill: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0)
+            PressedBorderColor: =RGBA(0,0,0,0)
+            PressedFill: =RGBA(0,0,0,0)
+            Image: |-
+              ="data:image/svg+xml;utf8, " & EncodeUrl(
+                  Substitute(
+                      "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'>
+                <path fill-rule='evenodd' d='M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8'/>
+              </svg>",
+                      "currentColor", "RGBA(246,246,250,1)"
+                  )
+              )
+      - iconOnlyOverlay:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Text: =""
+            Fill: =RGBA(0,0,0,0)
+            HoverFill: =RGBA(0,0,0,0.1)
+            PressedFill: =RGBA(0,0,0,0.2)
+            Color: =RGBA(255,255,255,1)
+            HoverColor: =RGBA(255,255,255,1)
+            PressedColor: =RGBA(255,255,255,1)
+            BorderStyle: =BorderStyle.None
+            BorderColor: =RGBA(0,0,0,0)
+            HoverBorderColor: =RGBA(0,0,0,0)
+            PressedBorderColor: =ColorFade(RGBA(0,188,242,1), 50%)
+            FocusedBorderColor: =ColorFade(Self.Fill, 75%)
+            FocusedBorderThickness: =4
+            DisabledBorderColor: =RGBA(0,0,0,0)
+            Height: =Parent.Height
+            Width: =Parent.Width
+            OnSelect: =false
