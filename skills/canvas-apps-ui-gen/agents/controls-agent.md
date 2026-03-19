@@ -104,6 +104,8 @@ Set ONLY these properties. Do not set anything else.
    - `SearchFields` on `ComboBox@0.0.51` → use `Classic/ComboBox@2.4.0`
    - `Default` on `Radio@0.0.25` → use `Classic/Radio@2.3.0`
 
+   **Variant rule for GroupContainer:** `GroupContainer@1.5.0` supports only `Variant: AutoLayout` or `Variant: ManualLayout`. Never output `Variant: Horizontal`, `Variant: Vertical`, or `Variant: GridLayout` for GroupContainer. Direction belongs in `LayoutDirection`.
+
 4. **Gallery Items — always Table(), never hardcoded duplicate controls.** If a design shows repeated items, they are gallery records — not individual controls.
 
 5. **SVG paths for icon Images:** In a Gallery's `Items` Table(), store only the SVG `d=` attribute string in a field like `IconPath`. The Styling Agent builds the full `Image` formula. For standalone (non-gallery) Image controls used as icons, write the full static SVG as:

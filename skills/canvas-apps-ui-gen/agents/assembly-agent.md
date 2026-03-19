@@ -191,6 +191,12 @@ Read Section C of `reference/controls-reference.md` (the PA2108 Trap Table). For
 - `Default` on `Radio@0.0.25` → switch control to `Classic/Radio@2.3.0`
 - Any other trap table match → remove the invalid property
 
+**PA2109s-style variant validation (hard error prevention):**
+For every `GroupContainer@1.5.0`, validate `Variant` is only `AutoLayout` or `ManualLayout`.
+If you find `Variant: Horizontal`, `Variant: Vertical`, or `Variant: GridLayout`, fix it inline:
+- `Variant: AutoLayout`
+- Set `LayoutDirection` to the corresponding direction (`Horizontal` or `Vertical`) if not already present
+
 **PA2105 — Potentially outdated versions (warning only, do not fix):**
 If any control uses a version string you believe may be outdated, note it as a warning. Do not change version strings — let the user verify in PA Studio.
 

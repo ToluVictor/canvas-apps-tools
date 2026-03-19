@@ -40,6 +40,13 @@ PA2108: [controlName] — [PropertyName] is not valid on [Control: type]
   Line [N]: Default: ="value" on TextInput@0.0.54 (use Classic/TextInput@2.3.2 instead)
 ```
 
+**PA2109s — Invalid GroupContainer variant:**
+If a `GroupContainer@1.5.0` uses `Variant: Horizontal`, `Variant: Vertical`, or `Variant: GridLayout`, flag it:
+```
+PA2109s: [controlName] uses invalid GroupContainer variant '[VariantValue]'
+  Use Variant: AutoLayout and set LayoutDirection accordingly.
+```
+
 **PA2105 — Potentially outdated versions:**
 If any control uses a version string that looks outdated (e.g., you know a newer version exists from your training), flag as a warning only:
 ```

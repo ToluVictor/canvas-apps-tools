@@ -186,9 +186,9 @@ A compact indented text tree showing control names, types, hierarchy, and high-l
 Screen: [ScreenName]
 Paste target: [a / b / c]
 
-  screenRoot [GroupContainer, Horizontal, fills screen]
+  screenRoot [GroupContainer, AutoLayout, fills screen]
   ├── sidebarContainer [GroupContainer, Vertical, fixed-width]
-  │   ├── logoArea [GroupContainer, Horizontal]
+  │   ├── logoArea [GroupContainer, AutoLayout]
   │   │   ├── logoIcon [Image, icon]
   │   │   └── logoText [Label]
   │   ├── navGallery [Gallery, Vertical]
@@ -196,7 +196,7 @@ Paste target: [a / b / c]
   │   │       ├── navItemIcon [Image, icon, gallery-child]
   │   │       ├── navItemLabel [Label, gallery-child]
   │   │       └── navItemOverlay [Classic/Button, transparent overlay]
-  │   └── profileRow [GroupContainer, Horizontal]
+  │   └── profileRow [GroupContainer, AutoLayout]
   └── mainContent [GroupContainer, Vertical, fills remaining]
       ├── topBar [GroupContainer, Vertical]
       │   ├── pageTitle [Label]
@@ -204,7 +204,7 @@ Paste target: [a / b / c]
       └── scrollableBody [GroupContainer, Vertical, scrollable]
           └── formCard [GroupContainer, Vertical, centered, card]
               ├── inputTitle [Classic/TextInput]
-              └── actionRow [GroupContainer, Horizontal]
+              └── actionRow [GroupContainer, AutoLayout]
                   ├── btnCancel [Classic/Button]
                   └── btnSave [Classic/Button]
 ```
@@ -382,3 +382,4 @@ PA2105 version bumps are the one case where template files may be mechanically u
 12. **Always use custom SVG icons — never `Classic/Icon@2.5.0`.** For every icon, use `Image@2.2.3` with an inline SVG. The `Classic/Icon` control must never appear in generated YAML.
 13. **Output token budget — always stay within 32 000 tokens per response.** Write YAML to file first (Phase 4 Step 4), then apply the code-block size guard (400 lines threshold).
 14. **HtmlText is display-only — never code interactions on it.** For any hyperlink or clickable link, use `Classic/Button@2.2.0` (or a Modern button) with `OnSelect: =Launch("<url>")`. Style it as a text-only button (no fill/border) to visually match a link. Never use `<a>` tags inside HtmlText as an interaction mechanism.
+15. **Never use `Variant: GridLayout` on `GroupContainer`.** Use only `Variant: AutoLayout` or `Variant: ManualLayout` for `GroupContainer@1.5.0`. Direction must be expressed with `LayoutDirection`.
