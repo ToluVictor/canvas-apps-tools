@@ -1,9 +1,8 @@
 {
   "name": "canvas-apps-tools",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AI skills for Power Apps Canvas Apps - generate, modify, and integrate.",
   "author": {
     "name": "Tolu Victor Sanwoolu"
-  },
-  "skills": ["../skills/canvas-apps-ui-gen"]
+  }
 }

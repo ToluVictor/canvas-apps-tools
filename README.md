@@ -3,7 +3,7 @@
 > Generate paste-ready Power Apps Canvas App YAML from screenshots, mockups, or text — directly inside Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.2-green.svg)](.claude-plugin/plugin.json)
 
 
 ## What it does

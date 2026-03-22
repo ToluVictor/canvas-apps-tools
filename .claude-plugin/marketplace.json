@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "AI skills for Power Apps Canvas Apps - generate paste-ready YAML from mockups, screenshots, or text descriptions",
-    "version": "1.0.1"
+    "version": "1.0.2"
   },
   "plugins": [
     {
       "name": "canvas-apps-ui-gen",
       "source": "./",
       "description": "Generate paste-ready Power Apps Canvas App YAML from screenshots, mockups, or text descriptions",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "category": "development"
     }
   ]
