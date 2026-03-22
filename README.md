@@ -44,13 +44,7 @@ Then install the plugin:
 /plugin install canvas-apps-ui-gen@ToluVictor/canvas-apps-tools
 ```
 
-Activate without restarting:
-
-```shell
-/reload-plugins
-```
-
-Run the skill:
+Open a new Claude Code instance to activate the plugin, then run the skill:
 
 ```shell
 /canvas-apps-ui-gen
@@ -127,7 +121,7 @@ The skill runs a multi-agent pipeline internally:
 
 | Symptom | Fix |
 |---|---|
-| `/canvas-apps-ui-gen` not recognized | Run `/reload-plugins` then try again; verify the install with `/plugin` → Installed tab |
+| `/canvas-apps-ui-gen` not recognized | Open a new Claude Code instance; verify the install with `/plugin` → Installed tab |
 | No output file appears | Check `skills/canvas-apps-ui-gen/output/`; rerun with a clearer description or smaller scope |
 | YAML shows errors in Power Apps Studio | Copy from the file directly (do not retype); if errors persist, rerun with a simpler prompt and fewer nested controls |
 | PA2105 version warning | Claude will self-heal the version number if you mention the warning in the same session |
