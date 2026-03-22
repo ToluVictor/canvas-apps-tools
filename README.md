@@ -3,7 +3,7 @@
 > Generate paste-ready Power Apps Canvas App YAML from screenshots, mockups, or text — directly inside Claude Code.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](.claude-plugin/plugin.json)
+[![Version](https://img.shields.io/badge/version-1.0.1-green.svg)](.claude-plugin/plugin.json)
 
 
 ## What it does
@@ -20,13 +20,13 @@ This plugin gives Claude Code a single skill — `canvas-apps-ui-gen` — that a
 ## Requirements
 
 - [Claude Code](https://claude.ai/claude-code) (v1.0.33 or later — run `claude --version` to check)
-- Git (for installation methods 1 and 3)
+- Git (for installation method 1)
 - Power Apps Studio (to paste and run the generated YAML)
 
 
 ## Installation
 
-Choose whichever method fits your workflow. All three end with the same command: `/canvas-apps-ui-gen`.
+Choose whichever method fits your workflow. Both end with the same command: `/canvas-apps-ui-gen`.
 
 ---
 
@@ -73,49 +73,6 @@ Run the skill:
 ```
 
 > This uses the [skills.sh](https://skills.sh) Agent Skills CLI. The skill is installed into your Claude Code skills folder and is available immediately in any new session.
-
----
-
-### Method 3 — Local clone
-
-Clone the repo to your machine, then load it as a local plugin.
-
-```bash
-git clone https://github.com/ToluVictor/canvas-apps-tools.git
-```
-
-**Load for a single session:**
-
-```bash
-claude --plugin-dir /path/to/canvas-apps-tools
-```
-
-**Install persistently for yourself (all projects):**
-
-```bash
-claude plugin install /path/to/canvas-apps-tools --scope user
-```
-
-**Install for everyone on a specific project:**
-
-```bash
-claude plugin install /path/to/canvas-apps-tools --scope project
-```
-
-Run the skill:
-
-```shell
-/canvas-apps-ui-gen
-```
-
-**Keeping it up to date:**
-
-```bash
-cd /path/to/canvas-apps-tools
-git pull
-```
-
-Then run `/reload-plugins` inside Claude Code to pick up the changes.
 
 ---
 
