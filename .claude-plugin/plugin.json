@@ -5,5 +5,5 @@
   "author": {
     "name": "Tolu Victor Sanwoolu"
   },
-  "skills": ["./skills/canvas-apps-ui-gen"]
+  "skills": "../skills/canvas-apps-ui-gen"
 }
