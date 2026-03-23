@@ -163,9 +163,36 @@ Wait for the user's single reply, then proceed to Phase 4.
 
 ## PHASE 4 — MULTI-AGENT YAML GENERATION
 
-### Step 0: Resolve Skill Directory
+### Step 0: Resolve Paths
 
-Before doing anything else, determine the absolute path to this skill's directory (the folder containing this SKILL.md file). All `output/` paths in Phase 4 are relative to that directory — not to the project root or CWD. Use this absolute path when writing, reading, or passing file paths to agents.
+Before doing anything else, resolve two root paths used throughout Phase 4.
+
+**A. Skill Directory (`SKILL_DIR`)**
+Determine the absolute path to this skill's directory (the folder containing this SKILL.md file).
+Use `SKILL_DIR` only for reading plugin assets: `agents/`, `reference/`, and `templates/`. Never write output files here.
+
+**B. Output Directory (`OUTPUT_DIR`)**
+Run this Bash command to get the user's working directory:
+
+```bash
+pwd
+```
+
+Store the result as `USER_CWD`. Then construct:
+`OUTPUT_DIR = {USER_CWD}/canvas-apps-output`
+
+Create it if it does not exist:
+
+```bash
+mkdir -p "{USER_CWD}/canvas-apps-output"
+```
+
+**Edge case:** If `USER_CWD` contains `.claude/plugins`, warn the user:
+> "Note: your terminal appears to be inside the Claude plugins directory. Output will be saved to `{OUTPUT_DIR}`. Navigate to your project folder first if you intended otherwise."
+
+Proceed regardless — do not stop.
+
+Use `SKILL_DIR` for all read operations on plugin assets. Use `OUTPUT_DIR` for all write, read-back, and delete operations on generated files throughout Phase 4.
 
 ### Step 1: Generate Skeleton + Design Spec
 
@@ -178,7 +205,7 @@ Based on Phase 3 analysis and the user's answers, produce two artifacts and writ
 
 **If the user specified modifications (optional changes field):** Incorporate them into both the skeleton and design spec before writing. Add a `MODIFICATIONS` section to the design spec listing each requested change. Build the skeleton to reflect those modifications — not the raw mockup.
 
-#### Artifact 1: Structural Skeleton → write to `output/temp-skeleton.md` using the Write tool directly (never Python or Bash)
+#### Artifact 1: Structural Skeleton → write to `{OUTPUT_DIR}/temp-skeleton.md` using the Write tool directly (never Python or Bash)
 
 A compact indented text tree showing control names, types, hierarchy, and high-level layout direction. Use this exact format:
 
@@ -191,7 +218,7 @@ Paste target: [a / b / c]
   │   ├── logoArea [GroupContainer, AutoLayout]
   │   │   ├── logoIcon [Image, icon]
   │   │   └── logoText [Label]
-  │   ├── navGallery [Gallery, Vertical]
+  │   ├── navGallery [Gallery, Vertical, items-cols: NavLabel|NavIcon|NavItemID, active-var: CurrentNavID, active-col: NavItemID]
   │   │   └── navItemRow [GroupContainer, ManualLayout]
   │   │       ├── navItemIcon [Image, icon, gallery-child]
   │   │       ├── navItemLabel [Label, gallery-child]
@@ -211,7 +238,19 @@ Paste target: [a / b / c]
 
 Include ALL controls. Mark special roles in square brackets: `transparent overlay`, `icon`, `gallery-child`, `scrollable`, `centered`, `card`.
 
-#### Artifact 2: Design Spec → write to `output/temp-design-spec.md` using the Write tool directly (never Python or Bash)
+**Gallery data-contract (required for every Gallery control):** In addition to the role tags, every Gallery line must include three extra annotations that all specialist agents will read to stay coordinated:
+
+- `items-cols: A|B|C` — the exact column names the controls-agent must use in the `Table()`. Derive names from the gallery's semantic purpose:
+  - Nav/sidebar gallery → `NavLabel|NavIcon|NavItemID`
+  - Tab gallery → `TabLabel|TabID`
+  - Data-table row gallery → column names matching the visible fields in the design (e.g., `OrderName|Status|Amount|OrderID`)
+  - Simple list gallery → `ItemLabel|ItemID`
+- `active-var: CurrentX` — the global variable name that tracks the selected item. Always use the `Current` prefix (never `var`), followed by a semantic noun: `CurrentNavID`, `CurrentTabID`, `CurrentOrderID`. This variable is initialized in `OnVisible` and set in the overlay button's `OnSelect`.
+- `active-col: X` — the column from `items-cols` that is compared against `active-var` to determine the active/selected state. This is always the ID/key column.
+
+Example: `navGallery [Gallery, Vertical, items-cols: NavLabel|NavIcon|NavItemID, active-var: CurrentNavID, active-col: NavItemID]`
+
+#### Artifact 2: Design Spec → write to `{OUTPUT_DIR}/temp-design-spec.md` using the Write tool directly (never Python or Bash)
 
 Read `reference/design-spec-formats.md` now. Use the section matching the resolved mode:
 - Replicate mode → **## Replicate Mode** section
@@ -240,7 +279,7 @@ Use the following rules to populate each field. All specialist agents treat this
   - DisabledFill: near-background (very low contrast)
   - DisabledColor: Text-Secondary at 0.38 opacity
 
-Fill in the chosen format with values extracted from the screenshot / user answers. Write the result to `output/temp-design-spec.md`.
+Fill in the chosen format with values extracted from the screenshot / user answers. Write the result to `{OUTPUT_DIR}/temp-design-spec.md`.
 
 After writing both files, proceed immediately to Step 2 — do **not** re-read `reference/controls-index.md` here (the controls-agent reads it directly).
 
@@ -257,14 +296,14 @@ Then launch all three agents **simultaneously in a single message** using the Ag
 
 **For each agent, pass:**
 - The full content of its instruction file (as the task description)
-- The absolute path to `output/temp-skeleton.md`
-- The absolute path to `output/temp-design-spec.md`
-- The absolute path to the skill directory (for reading reference docs)
+- The absolute path to `{OUTPUT_DIR}/temp-skeleton.md`
+- The absolute path to `{OUTPUT_DIR}/temp-design-spec.md`
+- `SKILL_DIR` (the skill directory absolute path, for reading reference docs in `reference/`)
 - The control style preference (classic / modern) from the user's Phase 3 answer — pass this explicitly to the controls-agent so it selects the correct variants
 - The absolute path to its output file:
-  - Layout+Sizing → `output/temp-layout-annotations.yaml`
-  - Controls → `output/temp-controls-annotations.yaml`
-  - Styling → `output/temp-styling-annotations.yaml`
+  - Layout+Sizing → `{OUTPUT_DIR}/temp-layout-annotations.yaml`
+  - Controls → `{OUTPUT_DIR}/temp-controls-annotations.yaml`
+  - Styling → `{OUTPUT_DIR}/temp-styling-annotations.yaml`
 
 Wait for all three agents to complete before proceeding to Step 3.
 
@@ -274,10 +313,11 @@ Wait for all three agents to complete before proceeding to Step 3.
 
 Read `agents/assembly-agent.md`. Launch the Assembly agent using the Agent tool with a prompt that includes:
 - The full content of `agents/assembly-agent.md`
-- Absolute paths to: `output/temp-skeleton.md`, `output/temp-layout-annotations.yaml`, `output/temp-controls-annotations.yaml`, `output/temp-styling-annotations.yaml`
-- Absolute path to `output/temp-design-spec.md` (needed for QA fidelity checks)
+- Absolute paths to: `{OUTPUT_DIR}/temp-skeleton.md`, `{OUTPUT_DIR}/temp-layout-annotations.yaml`, `{OUTPUT_DIR}/temp-controls-annotations.yaml`, `{OUTPUT_DIR}/temp-styling-annotations.yaml`
+- Absolute path to `{OUTPUT_DIR}/temp-design-spec.md` (needed for QA fidelity checks)
+- `SKILL_DIR` (the skill directory absolute path, for reading `reference/controls-reference.md` during QA)
 - Paste target (a, b, or c) and the screen name
-- The output filename: determine a unique filename first using `Glob` on `output/[ScreenName]-*-generated.yaml` inside the skill directory. If `output/[ScreenName]-1-generated.yaml` exists, use `-2-`, and so on.
+- The output filename: determine a unique filename first using `Glob` on `{OUTPUT_DIR}/[ScreenName]-*-generated.yaml`. If `{OUTPUT_DIR}/[ScreenName]-1-generated.yaml` exists, use `-2-`, and so on.
 - Data binding instructions (inline for paste target b; separate block for a and c)
 - Responsive design flag (if user mentioned responsive in their Phase 3 reply) with screen name for `ScreenName.Size` formulas
 
@@ -288,16 +328,16 @@ The Assembly agent self-validates and self-fixes all QA issues before writing th
 ### Step 4: Cleanup and Output
 
 Delete the temp files using the Bash tool (never Python):
-- `output/temp-skeleton.md`
-- `output/temp-design-spec.md`
-- `output/temp-layout-annotations.yaml`
-- `output/temp-controls-annotations.yaml`
-- `output/temp-styling-annotations.yaml`
+- `{OUTPUT_DIR}/temp-skeleton.md`
+- `{OUTPUT_DIR}/temp-design-spec.md`
+- `{OUTPUT_DIR}/temp-layout-annotations.yaml`
+- `{OUTPUT_DIR}/temp-controls-annotations.yaml`
+- `{OUTPUT_DIR}/temp-styling-annotations.yaml`
 
 Then output to the user:
 
 **1. Prominent file link (place this FIRST):**
-> **Your YAML is ready:** Open [ScreenName-N-generated.yaml](output/ScreenName-N-generated.yaml), press **Ctrl+A** then **Ctrl+C** to copy everything, then paste into Power Apps Studio.
+> **Your YAML is ready:** Your file has been saved to `{OUTPUT_DIR}/[ScreenName-N-generated.yaml]`. Open it in your editor, press **Ctrl+A** then **Ctrl+C** to copy everything, then paste into Power Apps Studio.
 
 **2. Paste instruction based on paste target:**
 - **(a) or (c)**: "In PA Studio: open the tree view, right-click the target screen or container, and select **Paste code**."
@@ -308,7 +348,12 @@ Then output to the user:
 (If responsive was requested: "This YAML uses `[ScreenName].Size` for responsiveness. Make sure your app is a **Tablet** canvas type, and in **Settings → Display**, turn off **Scale to fit** and **Lock Orientation**.")
 
 **4. For paste targets (a)/(c) — data binding block:**
-If the assembled YAML includes a `ClearCollect` separate block (from the Assembly agent), show it here with instructions to paste into `OnVisible`.
+If the assembly agent's completion message contains an `ONVISIBLE_BLOCK` field, extract that formula and display it here in chat. Do NOT read it from the output file — the file contains only YAML. Format it as:
+
+> **Also paste this into your screen's `OnVisible` property:**
+> ```
+> [formula from ONVISIBLE_BLOCK]
+> ```
 
 **5. If improvement mode — changes summary:**
 A brief bullet list of the key improvements made (color palette applied, controls upgraded, spacing standardized, states added, etc.).

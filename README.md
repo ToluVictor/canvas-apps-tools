@@ -125,6 +125,7 @@ The skill runs a multi-agent pipeline internally:
 | No output file appears | Check `skills/canvas-apps-ui-gen/output/`; rerun with a clearer description or smaller scope |
 | YAML shows errors in Power Apps Studio | Copy from the file directly (do not retype); if errors persist, rerun with a simpler prompt and fewer nested controls |
 | PA2105 version warning | Claude will self-heal the version number if you mention the warning in the same session |
+| "The function \* returned a non-finite number." error banner appears after pasting YAML | This occurs when the app contains a Gallery whose `Items` property could not be evaluated at paste time. Save the page, then reload Canvas App Studio — the error will clear on reload. |
 
 
 ## Contributing

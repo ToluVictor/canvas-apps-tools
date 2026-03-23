@@ -78,6 +78,36 @@ Set ONLY these properties. Do not set anything else.
 
 2. **AlignInContainer on every child**: Every control inside an AutoLayout container must have `AlignInContainer` explicitly set. Omitting it causes unpredictable alignment.
 
+   ### AlignInContainer Decision Rule — always check parent direction first
+
+   `AlignInContainer` positions a child on the **secondary axis** (perpendicular to the parent's `LayoutDirection`):
+   - **Horizontal parent** → secondary axis = **height**
+   - **Vertical parent** → secondary axis = **width**
+
+   **DEFAULT: `AlignInContainer: =AlignInContainer.Stretch`**
+   Use Stretch for: labels, content containers, buttons, inputs — any control that should fill the full secondary-axis dimension of its parent.
+   - In a horizontal parent → child fills full parent **height**
+   - In a vertical parent → child fills full parent **width**
+
+   **EXCEPTION: `AlignInContainer: =AlignInContainer.Center`** — ONLY when:
+   - The child has an explicit secondary-axis dimension (Height in horizontal parent, Width in vertical parent)
+   - AND that dimension is intentionally smaller than the parent's secondary-axis size
+   - Examples:
+     - Avatar circle (Height=28) in a horizontal row (Height=44) → Center: circle stays 28px, centered in 44px
+     - Icon square (Width=20) in a vertical sidebar (Width=52) → Center: icon stays 20px, centered in 52px
+     - Badge (Width=40) in a vertical container (Width=200) → Center: badge stays 40px, centered in 200px
+
+   **CRITICAL ANTI-PATTERN — do not repeat this mistake:**
+   ```
+   ❌ WRONG — label in horizontal row with AlignInContainer: Center
+      The label keeps only its natural height (~27px for Size 11) and floats in a 40px row.
+
+   ✓ RIGHT — label in horizontal row with AlignInContainer: Stretch + VerticalAlign: Middle
+      The label fills the full 40px row height; text is centered within it via VerticalAlign.
+   ```
+
+   `AlignInContainer` controls **how much space the control occupies** in the parent. It is NOT a text-alignment property. Text centering is `VerticalAlign: =VerticalAlign.Middle` on the label. These are separate concerns — never use Center on a label just to achieve vertical text centering.
+
 3. **FillPortions vs Height are mutually exclusive on Gallery**: Never set both. Use `FillPortions: =1` when the gallery fills remaining space. Use a calculated `Height` (e.g., `=Self.AllItemsCount * Self.TemplateHeight`) when you need a compact gallery.
 
 4. **TemplateSize is write-only**: To reference the template size in formulas, use `Self.TemplateHeight` (vertical gallery) or `Self.TemplateWidth` (horizontal gallery). Never use `Self.TemplateSize`.
@@ -115,6 +145,19 @@ Set ONLY these properties. Do not set anything else.
    Height: =fieldGroup1.Height + fieldGroup2.Height + (PaddingTop + PaddingBottom + (n-1)*LayoutGap)
    ```
    Same logic applies to `Width` inside Horizontal AutoLayout containers when `FillPortions = 0`.
+
+   **MANDATORY VERIFICATION — before finalizing any static Height:**
+   For every container with `FillPortions: =0` and a static `Height` value, verify:
+   ```
+   computed = PaddingTop + child1.Height + LayoutGap + child2.Height + ... + PaddingBottom
+   If computed ≠ static value → replace with the formula version
+   ```
+   **Never set a static Height that is smaller than the sum of children heights + gaps + padding** — children silently clip or overflow. Always prefer the formula so the container adjusts automatically if child heights change:
+   ```
+   Height: =PaddingTop + lblTitle.Height + LayoutGap + subRow.Height + PaddingBottom
+   ```
+
+   Also check child label container heights against font size minimums in `reference/sizing-reference.md` Section 1a before finalizing. A row container for Size 11 labels must be at least 30px (recommended 40px) — never set it to 20px or less.
 
 15. **Canvas scale factor — proportional vs absolute measurements**: Before setting sidebar width and card widths, compare the reference screenshot width (from the Design Spec MEASUREMENTS section) to the target canvas width (default 1366px for tablet).
 
@@ -155,6 +198,15 @@ Set ONLY these properties. Do not set anything else.
 
    **Exception — transparent focused borders**: Buttons and overlay controls with `FocusedBorderColor: =ColorFade(Self.Fill, 75%)` where `Self.Fill` is transparent produce an invisible ring. No adjustment needed.
 
+   **Card-in-row pattern**: When a horizontal row container holds card panels with `BorderThickness=1` and `FocusedBorderThickness=2`, add padding to the ROW container equal to `FocusedBorderThickness` on all affected sides:
+   ```yaml
+   PaddingTop: =2
+   PaddingBottom: =2
+   PaddingLeft: =2
+   PaddingRight: =2
+   ```
+   This prevents card borders from being clipped at the row container boundary. The row's static `Height` must account for this: `Height = cardHeight + (PaddingTop + PaddingBottom)`.
+
    Consult `reference/sizing-reference.md` Section 3 "Border Safety Margin" for the quick-reference table.
 
 18. **FillPortions ratio pattern — every visible child in a row needs space**: When multiple controls share a horizontal (or vertical) AutoLayout container and ALL must be fully visible:
@@ -184,6 +236,13 @@ Set ONLY these properties. Do not set anything else.
    This is cleaner than padding the parent — the button self-reduces to leave room for its own focus ring. Use this when `FocusedBorderColor` is NOT transparent and the parent has a fixed `Height`.
 
    Consult `reference/sizing-reference.md` Section 3 "Horizontal Row Proportions" for the quick-reference table.
+
+19. **ImagePosition for icon images**: When an `Image` control has explicit `Width` and `Height` set to the desired icon display size, use `ImagePosition: =ImagePosition.Stretch` so the SVG fills the control bounds cleanly. Use `ImagePosition: =ImagePosition.Center` only when the image should appear at its natural size centered within a larger control (e.g., a decorative photo displayed at natural resolution).
+
+   **Rule**: Icon images in sidebars, toolbars, nav galleries, and card headers with explicit `Width`/`Height` matching the icon size → always `Stretch`.
+   - Sidebar nav icons (20×20 in a 52px wide, 44px tall template) → `Stretch`
+   - Toolbar action icons (16×16 or 20×20) → `Stretch`
+   - Decorative photo thumbnails at natural size → `Center`
 
 ---
 

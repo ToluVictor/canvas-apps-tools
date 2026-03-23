@@ -119,6 +119,22 @@ Set ONLY these properties. Do not set anything else.
    Color: =If(CurrentMenuID = ThisItem.MenuID, RGBA(234,88,12,1), RGBA(107,114,128,1))
    ```
 
+8a. **Gallery column fidelity — read skeleton data-contract before writing (MANDATORY).** For every gallery child control that uses `ThisItem.X` or references an active-state variable, look up that gallery's `items-cols:`, `active-var:`, and `active-col:` annotations in `temp-skeleton.md`. Then:
+   - Only use `ThisItem.[column]` where `[column]` is one of the names in `items-cols:` — do NOT invent column names
+   - Only use `[active-var]` as the variable in `If()` active-state formulas — do NOT invent variable names
+   - The `If()` condition must be exactly: `[active-var] = ThisItem.[active-col]`
+
+   Example — skeleton says `items-cols: NavLabel|NavIcon|NavItemID, active-var: CurrentNavID, active-col: NavItemID`:
+   ```
+   Fill: =If(CurrentNavID = ThisItem.NavItemID, RGBA(237,233,254,1), RGBA(0,0,0,0))
+   Image: |-
+     ="data:image/svg+xml;utf8, " & EncodeUrl(
+         "<svg ...><path fill='" &
+         If(CurrentNavID = ThisItem.NavItemID, "rgba(99,91,255,1)", "rgba(107,114,128,1)") &
+         "' d='" & ThisItem.NavIcon & "'/></svg>"
+     )
+   ```
+
 9. **Typography consistency:** Apply the same font/size/weight to all controls of the same category. Every Label showing a form field label gets the same Size and FontWeight. Every input control gets the same Size. Check the TYPOGRAPHY section of the Design Spec for each category.
 
 10. **Exact property names:** When setting typography/color properties, use the property names exactly as listed in `reference/controls-reference.md` for the control's `Control:` type (for example `FontColor`/`FontSize` vs `Color`/`Size`). Do not mix naming schemes.

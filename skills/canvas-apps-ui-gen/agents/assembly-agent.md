@@ -28,6 +28,37 @@ Read all annotation files and the design spec before writing any output.
 
 ## Assembly Algorithm
 
+### Step 0 — Determine Root Format (do this FIRST, before any assembly)
+
+Read the `Paste target:` line from `temp-skeleton.md`. This determines the entire file structure — do not skip this step.
+
+- **Paste target (b) — new screen:** The output file MUST start with `Screens:`. Never start with `- screenRoot:`.
+  ```yaml
+  Screens:
+    ScreenName:
+      Properties:
+        Fill: =RGBA(249,250,251,1)
+        OnVisible: |-
+          =ClearCollect(colSampleData, ...)
+      Children:
+        - screenRoot:
+            Control: GroupContainer@1.5.0
+            ...
+  ```
+
+- **Paste target (a) or (c) — existing screen / section:** The output file starts with the bare container:
+  ```yaml
+  - screenRoot:
+      Control: GroupContainer@1.5.0
+      ...
+  ```
+
+Commit to the correct format before writing a single line of YAML.
+
+---
+
+### Step 1 — Merge controls (depth-first, top to bottom)
+
 For each control in the skeleton (depth-first, top to bottom):
 
 1. Look up the control name in **controls annotation** → get `Control:`, `Variant:`, and all semantic properties
@@ -145,19 +176,7 @@ Within `Properties:`, order properties as follows for readability:
 
 For **new screen (paste target b):** The ClearCollect formula is already embedded in `OnVisible` from the controls annotation. No separate block needed.
 
-For **existing screen (paste target a or c):** After the complete YAML, output a clearly labeled separate block:
-
-```
----
-PASTE INTO YOUR SCREEN'S OnVisible PROPERTY:
-
-=ClearCollect(
-    colSampleData,
-    {Title: "Item 1", Status: "Active", Value: 142},
-    {Title: "Item 2", Status: "Pending", Value: 87},
-    {Title: "Item 3", Status: "Closed", Value: 215}
-)
-```
+For **existing screen (paste target a or c):** Do NOT write the OnVisible block to the output file. The file must contain ONLY valid YAML — any non-YAML content will cause a paste error in Power Apps Studio. Instead, include the formula in your completion message using the `ONVISIBLE_BLOCK` field (see Output section below).
 
 ---
 
@@ -256,14 +275,36 @@ Also fix the inverse: any control with both `FillPortions > 0` AND an explicit `
 
 ---
 
+### QA Check 6 — Gallery Column & Variable Validation
+
+**Step A — Build the gallery column map:**
+For each `Gallery` control in the assembled YAML, parse its `Items:` formula and extract the column names from the first record of the `Table({Col1: ..., Col2: ..., ...}, ...)` structure. Store: `galleryControlName → [Col1, Col2, ...]`.
+
+**Step B — Fix `ThisItem.X` mismatches:**
+For each Gallery, scan every property value of every control nested inside its `Children:` block. For each `ThisItem.X` reference found:
+- If `X` is in the gallery's column list → OK, no change
+- If `X` is NOT in the column list → find the best semantic match among the gallery's actual columns (e.g., `NavID` → `NavItemID`; `ID` → the sole ID-type column; `Icon` → the icon column). Replace ALL occurrences of `ThisItem.X` with `ThisItem.[bestMatch]` and log: `Fixed gallery-column mismatch: ThisItem.[X] → ThisItem.[bestMatch] in [controlName]`
+- If no semantic match can be determined, keep the original and add a WARNING: "Unresolved ThisItem.[X] reference in [controlName] — column not found in [galleryControlName].Items"
+
+**Step C — Fix uninitialized variable references:**
+- Collect all variable names (`CurrentX`, `varX`) referenced in any property value across the entire assembled YAML
+- Collect all variable names that are initialized anywhere in the YAML: inside `Set(X, ...)`, `UpdateContext({X: ...})`, `ClearCollect(X, ...)` calls (in `OnVisible`, `OnSelect`, or any other property)
+- For each variable that is referenced but never initialized:
+  - Add `Set([varName], 1)` to the screen's `OnVisible` formula (paste target b) or to the `ONVISIBLE_BLOCK` in the completion message (paste targets a/c)
+  - Log: `Added initialization: Set([varName], 1) — verify initial value is correct`
+  - Add WARNING: "Variable `[varName]` was referenced but not initialized in the generated YAML — review the Set() initial value in OnVisible"
+- **Exception:** Do NOT flag a variable that appears ONLY inside `OnSelect` formulas — those are self-initializing by design.
+
+---
+
 ## Output
 
 After assembly and all QA fixes, write the complete clean YAML to the specified output file using the **Write tool directly** — never use Python, Bash, or any scripting language to write the file, regardless of the file size.
 
 The file must contain:
-- Raw YAML only (no markdown fences, no commentary)
-- For paste target (a)/(c): just the YAML, followed by the OnVisible block if applicable
-- For paste target (b): `Screens:` block as the root
+- Raw YAML only (no markdown fences, no commentary, no `---` separators, no trailing text)
+- For paste target (a)/(c): YAML only — the file ends at the last YAML line. No OnVisible block in the file.
+- For paste target (b): `Screens:` block as the root, with `OnVisible` formula embedded inside the screen's `Properties:`
 
 Then output a completion message in this exact format:
 ```
@@ -275,6 +316,9 @@ QA FIXES APPLIED: [N] (or "QA CLEAN — no issues found")
   - Added LayoutMinWidth/LayoutMinHeight to 4 GroupContainers
   - Added AlignInContainer to 6 child controls]
 WARNINGS: [list PA2105 or other non-blocking concerns, or "none"]
+ONVISIBLE_BLOCK (paste target a/c only — omit this field entirely for paste target b):
+=Set(varNavIconID, 1);
+ClearCollect(colSampleData, ...)
 ```
 
 Do not output the YAML content to the conversation — only write it to the file.

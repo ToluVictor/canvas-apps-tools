@@ -108,6 +108,24 @@ Set ONLY these properties. Do not set anything else.
 
 4. **Gallery Items — always Table(), never hardcoded duplicate controls.** If a design shows repeated items, they are gallery records — not individual controls.
 
+4a. **Gallery data-contract — read from skeleton before writing (MANDATORY).** For every Gallery control, look up its `items-cols:`, `active-var:`, and `active-col:` annotations in `temp-skeleton.md` before writing anything. Then:
+   - Use **exactly** the column names from `items-cols:` in the `Table({...})` — do not invent alternatives or rename them
+   - In the overlay button's `OnSelect`: `=Set([active-var], ThisItem.[active-col])` using the exact names from the skeleton
+   - In the `OnVisible` (or `ONVISIBLE_BLOCK` for paste targets a/c): include `Set([active-var], 1)` to initialize the active-state variable
+
+   Example — if skeleton says `items-cols: NavLabel|NavIcon|NavItemID, active-var: CurrentNavID, active-col: NavItemID`:
+   ```yaml
+   navGallery:
+     Items: |-
+       =Table(
+           {NavLabel: "Dashboard", NavIcon: "M...", NavItemID: 1},
+           {NavLabel: "Projects",  NavIcon: "M...", NavItemID: 2}
+       )
+   navItemOverlay:
+     OnSelect: =Set(CurrentNavID, ThisItem.NavItemID)
+   # In OnVisible: Set(CurrentNavID, 1)
+   ```
+
 5. **SVG paths for icon Images:** In a Gallery's `Items` Table(), store only the SVG `d=` attribute string in a field like `IconPath`. The Styling Agent builds the full `Image` formula. For standalone (non-gallery) Image controls used as icons, write the full static SVG as:
    ```
    Image: |-

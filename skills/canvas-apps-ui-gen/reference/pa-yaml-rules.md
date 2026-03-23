@@ -250,12 +250,20 @@ Never rely on the parent's `LayoutAlignItems` as the default.
 
 ### Decision guide — what to set on each child
 
+Identify the parent's `LayoutDirection` first — it determines which axis `AlignInContainer` controls:
+- **Horizontal parent** → AlignInContainer controls **height** allocation
+- **Vertical parent** → AlignInContainer controls **width** allocation
+
 | What the child should do | Set on child |
 |---|---|
 | Fill the full cross-axis (labels, content areas, inputs) | `AlignInContainer: =AlignInContainer.Stretch` |
+| Labels needing vertical centering in a **horizontal** parent | `AlignInContainer: Stretch` (fills height) + `VerticalAlign: Middle` on the label — **NOT Center** |
+| Labels needing horizontal centering in a **vertical** parent | `AlignInContainer: Stretch` (fills width) — **NOT Center** unless the label has an intentionally narrower explicit `Width` |
 | Keep its own fixed size, centered on cross-axis | `AlignInContainer: =AlignInContainer.Center` |
 | Keep its own fixed size, pinned to start | `AlignInContainer: =AlignInContainer.Start` |
 | Keep its own fixed size, pinned to end | `AlignInContainer: =AlignInContainer.End` |
+
+> **ANTI-PATTERN**: Do NOT use `AlignInContainer: Center` on a label to achieve vertical centering. A centered label only occupies its natural height (~27px for Size 11) and creates gaps above/below in taller rows. Use `AlignInContainer: Stretch` + `VerticalAlign: Middle` instead. `AlignInContainer` controls how much **space** the control occupies — it is not a text alignment property.
 
 ### Circle avatar pattern (profile photos, thumbnails)
 
