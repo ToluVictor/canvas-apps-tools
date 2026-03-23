@@ -14,7 +14,7 @@ This plugin gives Claude Code a single skill — `canvas-apps-ui-gen` — that a
 - **Improve** an existing Canvas App screen (modernize spacing, upgrade controls, add hover/focus states)
 - **Build from scratch** from a text description alone
 - Enforces Power Apps YAML rules (PA2105 / PA2108 / PA1001) automatically
-- Saves output to `skills/canvas-apps-ui-gen/output/` and displays it inline when small (< 400 lines)
+- Saves output to `canvas-apps-ui-gen-output/` in your current working directory and displays it inline when small (< 400 lines)
 
 
 ## Requirements
@@ -31,6 +31,8 @@ Choose whichever method fits your workflow. Both end with the same command: `/ca
 ---
 
 ### Method 1 — Marketplace (recommended)
+
+Run these commands inside **Claude Code**:
 
 Add this repo as a marketplace, then install the plugin:
 
@@ -54,13 +56,13 @@ Open a new Claude Code instance to activate the plugin, then run the skill:
 
 ### Method 2 — Individual skill install (skills CLI)
 
-If you only want this one skill without installing the full plugin:
+If you only want this one skill without installing the full plugin, run this in your **terminal**:
 
 ```shell
 npx skills add ToluVictor/canvas-apps-tools --skill canvas-apps-ui-gen
 ```
 
-Run the skill:
+Then run the skill inside **Claude Code**:
 
 ```shell
 /canvas-apps-ui-gen
@@ -100,7 +102,7 @@ Paste a screenshot of your current Power Apps screen into the chat, run `/canvas
 
 When generation finishes, Claude shows a link to the output file and paste instructions. The general flow is:
 
-1. Open the generated YAML file in `skills/canvas-apps-ui-gen/output/`
+1. Open the generated YAML file in `canvas-apps-ui-gen-output/` in your current working directory
 2. Press `Ctrl+A` then `Ctrl+C` to copy everything
 3. In Power Apps Studio, right-click the target screen or container in the tree view
 4. Select **Paste code**
@@ -122,7 +124,7 @@ The skill runs a multi-agent pipeline internally:
 | Symptom | Fix |
 |---|---|
 | `/canvas-apps-ui-gen` not recognized | Open a new Claude Code instance; verify the install with `/plugin` → Installed tab |
-| No output file appears | Check `skills/canvas-apps-ui-gen/output/`; rerun with a clearer description or smaller scope |
+| No output file appears | Check `canvas-apps-ui-gen-output/` in your current working directory; rerun with a clearer description or smaller scope |
 | YAML shows errors in Power Apps Studio | Copy from the file directly (do not retype); if errors persist, rerun with a simpler prompt and fewer nested controls |
 | PA2105 version warning | Claude will self-heal the version number if you mention the warning in the same session |
 | "The function \* returned a non-finite number." error banner appears after pasting YAML | This occurs when the app contains a Gallery whose `Items` property could not be evaluated at paste time. Save the page, then reload Canvas App Studio — the error will clear on reload. |
