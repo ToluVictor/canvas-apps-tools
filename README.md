@@ -19,8 +19,8 @@ This plugin gives Claude Code a single skill — `canvas-apps-ui-gen` — that a
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/claude-code) (v1.0.33 or later — run `claude --version` to check)
-- Git (for installation method 1)
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) or [GitHub Copilot CLI](https://docs.github.com/en/copilot)
+- [Node.js](https://nodejs.org/) 18+
 - Power Apps Studio (to paste and run the generated YAML)
 
 
